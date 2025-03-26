@@ -1,8 +1,6 @@
-'use client'
+/*'use client'
 
 import { createClient } from '@/utils/supabase/server';
-import { revalidatePath, revalidateTag } from 'next/cache';
-import { redirect  } from 'next/navigation';
 import { useSearchParams } from 'next/navigation';
 
 export default async function ViewSingleOrder() 
@@ -34,4 +32,4 @@ export default async function ViewSingleOrder()
     </div>
   );
 }
-  
+*/
