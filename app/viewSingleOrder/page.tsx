@@ -16,7 +16,7 @@ export default async function ViewSingleOrder({
     .from('orders')
     .select('*')
     .eq('order_id', orderId)
-    .maybeSingle();  // .maybeSingle() sets to null when not found
+    .maybeSingle();
 
   if (error) throw error;
 
