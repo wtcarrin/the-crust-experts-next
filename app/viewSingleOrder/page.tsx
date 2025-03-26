@@ -1,3 +1,5 @@
+'use client'
+
 import { createClient } from '@/utils/supabase/server';
 import { revalidatePath, revalidateTag } from 'next/cache';
 import { redirect  } from 'next/navigation';
