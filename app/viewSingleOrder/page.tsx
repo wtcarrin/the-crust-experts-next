@@ -1,3 +1,18 @@
+import { createClient } from '@/utils/supabase/server';
+import { revalidatePath, revalidateTag } from 'next/cache';
+import { redirect  } from 'next/navigation';
+
+export default async function Orders() {
+
+  return (
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-6">Cart</h1>
+      <h4>problems with viewsingleorder, can't query database if 'use client', can't use useSearchParams without 'use client'</h4>
+    </div>
+  );
+}
+
+
 /*'use client'
 
 import { createClient } from '@/utils/supabase/server';
