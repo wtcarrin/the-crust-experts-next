@@ -1,6 +1,4 @@
-import { createClient } from '@/utils/supabase/server';
-import { revalidatePath, revalidateTag } from 'next/cache';
-import { redirect  } from 'next/navigation';
+
 
 export default async function Orders() {
 
@@ -13,8 +11,10 @@ export default async function Orders() {
 }
 
 
-/*'use client'
-
+/*
+import { createClient } from '@/utils/supabase/server';
+import { revalidatePath, revalidateTag } from 'next/cache';
+import { redirect  } from 'next/navigation';
 import { createClient } from '@/utils/supabase/server';
 import { useSearchParams } from 'next/navigation';
 
