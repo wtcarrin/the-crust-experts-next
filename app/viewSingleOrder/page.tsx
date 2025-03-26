@@ -1,12 +1,14 @@
 import { createClient } from '@/utils/supabase/server';
 
 export default async function ViewSingleOrder({
+  params,
   searchParams,
 }: {
-  searchParams: { q: string };
+  params: { slug: string };
+  searchParams: { [key: string]: string | string[] | undefined };
 }) {
-  const supabase = await createClient();
-  const orderId = searchParams.q;
+  const orderId = searchParams.q as string;
+  const supabase = await createClient()
 
   if (!orderId) {
     return <p>No order ID provided</p>;
