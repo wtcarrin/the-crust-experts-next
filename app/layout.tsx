@@ -49,6 +49,7 @@ export default function RootLayout({
                       <Link href={"/viewSingleOrder"}>Individual order</Link>
                       <Link href={"/addOrder"}>Add order</Link>
                       <Link href={"/cart"}>Cart</Link>
+                      <Link href={"/profile"}>Profile</Link>
                     </div>
                   </div>
                   {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}

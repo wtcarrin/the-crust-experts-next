@@ -10,38 +10,6 @@ export default async function MenuItems() {
       return res;
     });
 
-  // function to handle form submission
-  async function handleAddMenuItem(formData: FormData) {
-    'use server';
-    
-    const menuItemId = formData.get('menu_item_id')
-    const name = formData.get('name') as string;
-    const description = formData.get('description') as string;
-    const price = formData.get('price')
-    const category = formData.get('category')
-    const customizable = formData.get('customizable')
-    const supabase = await createClient();
-    
-    const { error } = await supabase
-      .from('menu items')
-      .insert([{ 
-        menu_item_id: menuItemId,
-        name: name,
-        description: description,
-        price: price,
-        category: category,
-        customizable: customizable
-      }])
-      .select();
-    
-    if (error) {
-      console.error('Error adding menu item:', error);
-      throw error;
-    }
-    
-    revalidateTag('menu_items');    
-  }
-
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">Menu - Customer view</h1>
