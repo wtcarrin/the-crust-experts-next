@@ -4,6 +4,14 @@ import { getCustomerProfile } from '../actions/getProfileData';
 export default async function Profile() {
   const { customer, userId, error } = await getCustomerProfile();
 
+  if (!customer) {
+    return (
+      <div className="p-6">
+        <h1 className="text-2xl font-bold mb-6">Profile is null! This should never happen bro.</h1>
+      </div>
+        );
+  }
+
   if (error) {
     return <div className="p-6 text-red-600">{error}</div>;
   }

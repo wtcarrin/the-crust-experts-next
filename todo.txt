@@ -1,0 +1,4 @@
+1. We're doing the customers table manually --> after a user creates an account or we make them
+    an anonymous one, we update the customers table with a new row by hand. This is one in 
+    middleware.ts and signup. It would be better to do this automatically but I'm not sure it's 
+    an issue as long as removing a user from user table also removes the customer (which it does)
