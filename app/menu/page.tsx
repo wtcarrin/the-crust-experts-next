@@ -1,7 +1,8 @@
 import { createClient } from '@/utils/supabase/server';
 import { revalidateTag } from 'next/cache';
 import { getAllMenuItems } from '../actions/getAllMenuItems';
-  
+import { addItemToCart } from '../actions/addItemToCart';
+
 export default async function menu() {
   const menuItems = await getAllMenuItems()
   
@@ -18,6 +19,17 @@ return (
             key={menuItem.menu_item_id} 
             className="w-full border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
           >
+            <form action={async () => {
+              'use server';
+              await addItemToCart();
+            }}>
+              <button 
+                type="submit"
+                aria-label="Add to cart"
+              >
+                <p>Add to Cart</p>
+              </button>
+            </form>
             <div className="grid grid-cols-5 gap-4 items-center">
               <div className="col-span-2">
                 <h2 className="text-lg font-semibold">{menuItem.name}</h2>
@@ -38,12 +50,6 @@ return (
                   <span className="text-gray-500">Standard</span>
                 )}
               </div>
-              <button 
-                className="p-2 rounded-full bg-white text-black border border-gray-300 hover:bg-gray-100 transition-colors"
-                aria-label="Add to cart"
-              >
-                Add to cart
-              </button>
             </div>
           </div>
         ))}

@@ -48,6 +48,23 @@ export default async function AuthButton() {
       </>
     );
   }
+  if (!user || !user.email) {
+    return (
+      <>
+        <div className="flex gap-4 items-center">
+        Signed in as guest!
+        <div className="flex gap-2">
+      <Button asChild size="sm" variant={"outline"}>
+        <Link href="/login">Sign in</Link>
+      </Button>
+      <Button asChild size="sm" variant={"default"}>
+        <Link href="/signup">Sign up</Link>
+      </Button>
+    </div>
+        </div>
+      </>
+    );
+  }
   return user ? (
     <div className="flex items-center gap-4">
       Hey, {user.email}!

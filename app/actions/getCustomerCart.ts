@@ -1,6 +1,6 @@
 import { createClient } from '@/utils/supabase/server';
 
-export async function getCustomerProfile() {
+export async function getCustomerCart() {
   const supabase = await createClient();
   const { data: authData, error: authError } = await supabase.auth.getUser();
 
@@ -8,19 +8,20 @@ export async function getCustomerProfile() {
     return { error: 'User not authenticated', customer: null, userId: null };
   }
 
-  if (!authData?.user || !authData?.user.email) {
-    return { error: 'Customer logged in as guest! Sign in to see profile details.', customer: null, userId: authData.user.id };
-  }
-
-  const { data: customer, error } = await supabase
+  const { data: cart, error } = await supabase
     .from("customers")
-    .select("first_name, last_name, phone_number, address")
+    .select("cart_contents")
     .eq("id", authData.user.id)
     .single();
 
-  if (error || !customer) {
+  if (error || !cart) {
     return { error: 'Error fetching customer data', customer: null, userId: authData.user.id };
   }
 
-  return { customer, userId: authData.user.id, error: null };
+  // Check if cart_contents is null
+  if (cart.cart_contents === null) {
+    return { error: 'Cart is empty', customer: null, userId: authData.user.id };
+  }
+
+  return { cart, userId: authData.user.id, error: null };
 }

@@ -1,5 +1,3 @@
-  import { createClient } from '@/utils/supabase/server';
-  import { revalidatePath, revalidateTag } from 'next/cache';
   import { Trash2 } from 'lucide-react';
 
   //server functions

@@ -33,9 +33,29 @@ export async function updateSession(request: NextRequest) {
 
   // IMPORTANT: DO NOT REMOVE auth.getUser()
 
-  const {
+  let {
     data: { user },
-  } = await supabase.auth.getUser()
+  } = await supabase.auth.getUser();
+  
+  //anonymous sign-in
+  if (!user) {
+    const { data, error } = await supabase.auth.signInAnonymously()
+  
+    if (error) {
+      console.error("Error signing in anonymously:", error);
+    } else {
+      user = data.user;
+    }
+      if (user) {
+        await supabase
+          .from('customers')
+          .insert([
+            {
+              id: user.id,
+            }
+          ]);
+      }
+  }
 
   if (
     !user &&
