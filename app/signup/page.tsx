@@ -1,7 +1,7 @@
 "use client";
 import '../styles/globals.css'; // Import CSS to load for all pages
 import { useRouter } from "next/navigation";
-import { signup } from "./actions";
+import { signup } from "../actions/signup";
 
 export default function SignupPage() {
   const router = useRouter();
@@ -13,7 +13,7 @@ export default function SignupPage() {
   return (
     <section className="wrapper">
       <div className="form signup">
-        <header>Signup</header>
+        <header>SIGN UP</header>
         <form>
           <label htmlFor="first_name">First Name:</label>
           <input id="first_name" name="first_name" type="text" required />

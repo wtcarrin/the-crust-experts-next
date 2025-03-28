@@ -2,61 +2,14 @@
   import { revalidatePath, revalidateTag } from 'next/cache';
   import { Trash2 } from 'lucide-react';
 
-  export default async function MenuItems() {
-    const supabase = await createClient();
-    const { data: menuItems } = await supabase
-    .from("menu items")
-    .select()
-    .then((res) => {
-      return res;
-    });
+  //server functions
+  import { addMenuItem } from '../actions/addMenuItem'
+  import { deleteMenuItem } from '../actions/deleteMenuItem'
+  import { getAllMenuItems } from '../actions/getAllMenuItems';
 
-    // function to handle form submission
-    async function handleAddMenuItem(formData: FormData) {
-      'use server';
-      
-      const name = formData.get('name') as string;
-      const description = formData.get('description') as string;
-      const price = formData.get('price')
-      const category = formData.get('category')
-      const customizable = formData.get('customizable')
-      const supabase = await createClient();
-      
-      const { error } = await supabase
-        .from('menu items')
-        .insert([{ 
-          name : name,
-          description : description,
-          price : price,
-          category : category,
-          customizable : customizable
-      }])
-        .select();
-      
-      if (error) {
-        console.error('Error adding menu item:', error);
-        throw error
-      }
-      
-      revalidateTag('menu_items')    
-    }
-
-    async function handleDeleteMenuItem(menuItemId : number) {
-      'use server';
-
-      const supabase = await createClient();
-      const { error } = await supabase
-        .from('menu items')
-        .delete()
-        .eq('menu_item_id', menuItemId)
-      
-      if (error) {
-        console.error('Error deleting menu item: ', error);
-        throw error;
-      }
-
-      revalidateTag('menu_items');
-    }
+  export default async function changeMenu() {
+    
+    const menuItems = await getAllMenuItems()
 
     return (
       <div className="p-6">
@@ -65,7 +18,7 @@
         {/* Add Product Form */}
         <div className="mb-8 p-4 border rounded-lg">
           <h2 className="text-lg font-semibold mb-3">Add New Menu Item</h2>
-          <form action={handleAddMenuItem} className="flex flex-wrap gap-2">
+          <form action={addMenuItem} className="flex flex-wrap gap-2">
               <input
               type="text"
               name="name"
@@ -114,7 +67,7 @@
             {/* Delete button */}
             <form action={async () => {
               'use server';
-              await handleDeleteMenuItem(menuItem.menu_item_id);
+              await deleteMenuItem(menuItem.menu_item_id);
             }}>
               <button 
                 type="submit"

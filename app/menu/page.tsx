@@ -1,16 +1,11 @@
 import { createClient } from '@/utils/supabase/server';
 import { revalidateTag } from 'next/cache';
-
-export default async function MenuItems() {
-  const supabase = await createClient();
-  const { data: menuItems } = await supabase
-    .from("menu items")
-    .select()
-    .then((res) => {
-      return res;
-    });
-
-  return (
+import { getAllMenuItems } from '../actions/getAllMenuItems';
+  
+export default async function menu() {
+  const menuItems = await getAllMenuItems()
+  
+return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">Menu - Customer view</h1>
       <h4>Sort items by type, with a default list order that makes sense -- eentrees, sides, drinks...</h4>

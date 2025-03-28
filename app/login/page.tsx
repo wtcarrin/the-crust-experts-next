@@ -1,7 +1,7 @@
 "use client";
 import '../styles/globals.css'; // Import css here to load it for all pages
 import { useRouter } from "next/navigation";
-import { login } from "./actions";
+import { login } from "../actions/login";
 
 export default function LoginPage() {
   const router = useRouter();
