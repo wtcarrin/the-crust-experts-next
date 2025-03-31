@@ -5,23 +5,32 @@ export async function getCustomerCart() {
   const { data: authData, error: authError } = await supabase.auth.getUser();
 
   if (authError || !authData?.user) {
-    return { error: 'User not authenticated', customer: null, userId: null };
+    return { cart: [], userId: null, error: 'User not authenticated' };
   }
 
   const { data: cart, error } = await supabase
-    .from("customers")
-    .select("cart_contents")
-    .eq("id", authData.user.id)
+    .from("orders")
+    .select("order_contents")
+    .eq("order_owner_id", authData.user.id)
     .single();
 
   if (error || !cart) {
-    return { error: 'Error fetching customer data', customer: null, userId: authData.user.id };
+    return { cart: [], userId: authData.user.id, error: 'Error fetching customer data' };
+  }
+  // Ensure cart_contents is always returned as an array
+  let cartContents;
+  try {
+    cartContents = JSON.parse(cart.order_contents);
+    if (!Array.isArray(cartContents)) {
+      cartContents = [];
+    }
+  } catch (err) {
+    cartContents = [];
   }
 
-  // Check if cart_contents is null
-  if (cart.cart_contents === null) {
-    return { error: 'Cart is empty', customer: null, userId: authData.user.id };
-  }
-
-  return { cart, userId: authData.user.id, error: null };
+  return { 
+    cart: cartContents, 
+    userId: authData.user.id, 
+    error: null 
+  };
 }

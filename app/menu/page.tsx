@@ -21,7 +21,7 @@ return (
           >
             <form action={async () => {
               'use server';
-              await addItemToCart();
+              await addItemToCart(menuItem.menu_item_id);
             }}>
               <button 
                 type="submit"

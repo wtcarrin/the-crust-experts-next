@@ -1,42 +1,48 @@
 import { createClient } from '@/utils/supabase/server';
 
-export async function addItemToCart() {
+export async function addItemToCart(itemId : any) {
   const supabase = await createClient();
 
-  let { data: authData, error: authError } = await supabase.auth.getUser();
-
+  // Check authentication
+  const { data: authData, error: authError } = await supabase.auth.getUser();
+  
   if (authError || !authData?.user) {
     return { error: 'User not authenticated', customer: null, userId: null };
   }
 
-  const userId = authData.user.id;
-
   // Get current cart
-  let { data: current_cart, error: getCartError } = await supabase
-    .from("customers")
-    .select("cart_contents")
-    .eq("id", userId)
+  let { data: customer_cart, error: getCartError } = await supabase
+    .from('orders')
+    .select("order_contents")
+    .eq("order_owner_id", authData.user.id)
     .single();
 
   if (getCartError) {
-    return { error: getCartError.message, customer: null, userId };
+    return { error: getCartError.message, customer: null };
   }
 
-  // Append 'pizza' to the current cart contents
-  const updatedCartContents = current_cart ? current_cart.cart_contents + ' pizza' : 'pizza'
+  var updatedCartContents;
+  if (customer_cart == null || customer_cart.order_contents == null) {
+    updatedCartContents = [itemId];
+  } else {
+    updatedCartContents = JSON.parse(customer_cart.order_contents); 
+    updatedCartContents.push(itemId);
+  }
 
-  // Update the cart contents in the database
+  updatedCartContents = JSON.stringify(updatedCartContents);
+  
   const { data, error } = await supabase
-    .from('customers')
-    .update({
-      cart_contents: updatedCartContents
+    .from('orders')
+    .update({ 
+      order_contents: updatedCartContents
     })
-    .eq('id', userId)
+    .eq('order_owner_id', authData.user.id)
     .select();
 
   if (error) {
-    return { error: error.message, customer: null, userId };
+    console.error('Supabase error:', error);
+    return { error: error.message, customer: null };
   }
 
-  return { data, userId };
+  return { error: null, customer: data };
 }

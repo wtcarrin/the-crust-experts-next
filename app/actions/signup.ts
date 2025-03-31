@@ -48,5 +48,20 @@ export async function signup(formData: FormData) {
     }
   }
 
+  if (authData.user) {
+    const { error: insertError } = await supabase
+      .from('orders')
+      .insert([
+        {
+          order_owner_id: authData.user.id,
+          order_contents : null
+        }
+      ]);
+
+    if (insertError) {
+      redirect('/error');
+    }
+  }
+
   redirect('/');
 }

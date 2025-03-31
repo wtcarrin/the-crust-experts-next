@@ -46,15 +46,23 @@ export async function updateSession(request: NextRequest) {
     } else {
       user = data.user;
     }
-      if (user) {
-        await supabase
-          .from('customers')
-          .insert([
-            {
-              id: user.id,
-            }
-          ]);
-      }
+    if (user) {
+      await supabase
+        .from('customers')
+        .insert([
+          {
+            id: user.id,
+          }
+        ]);
+      await supabase
+      .from('orders')
+      .insert([
+        {
+          order_owner_id: user.id,
+          order_contents : null
+        }
+      ]);
+    }
   }
 
   if (
