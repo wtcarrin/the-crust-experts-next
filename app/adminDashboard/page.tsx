@@ -14,7 +14,7 @@ export default async function Orders() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Admin dashboard</h1>
+      <h1 className="text-2xl font-bold mb-6">Admin Dashboard</h1>
       <h4>All orders:</h4>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
