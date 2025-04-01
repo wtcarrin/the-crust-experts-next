@@ -9,8 +9,6 @@ export default async function menu() {
 return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">Menu - Customer view</h1>
-      <h4>Sort items by type, with a default list order that makes sense -- eentrees, sides, drinks...</h4>
-      <h4>Also an add to cart button on each list element... not really sure about how to do the cart for now</h4>
 
       {/* Full-width table/list layout */}
       <div className="space-y-4">
