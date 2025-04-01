@@ -1,4 +1,18 @@
+--------------------TO-DO--------------------
+1. Finish all mvp functionality
+    - finish lifecycle of an order (we can create and view the cart, not remove or pay)
+    - admin dashboard
+2. Add in responsive client-side visual feedback
+    - password requirements popup if not complex enough
+    - signup email already exists
+    - login incorrect password warning
+    - adding to cart animation so you can tell when the supabase function is done
+    - more?
+3. More responsive feedback for viewing an item in cart that's been removed from the menu
+
+--------------------PROBLEMS--------------------
 1. We're doing the customers table manually --> after a user creates an account or we make them
     an anonymous one, we update the customers table with a new row by hand. This is one in 
     middleware.ts and signup. It would be better to do this automatically but I'm not sure it's 
     an issue as long as removing a user from user table also removes the customer (which it does)
+2. No clue how the revalidateTag() calls are working... but they are :)

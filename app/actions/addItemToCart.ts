@@ -9,6 +9,16 @@ export async function addItemToCart(itemId : any) {
   if (authError || !authData?.user) {
     return { error: 'User not authenticated', customer: null, userId: null };
   }
+  // Make sure we don't accept invalid id:
+    let { error: menuError } = await supabase
+      .from('menu items')
+      .select()
+      .eq('menu_item_id', itemId)
+    
+    if (menuError) {
+      console.error('Error deleting menu item: ', menuError);
+      throw menuError;
+    }
 
   // Get current cart
   let { data: customer_cart, error: getCartError } = await supabase
@@ -22,11 +32,15 @@ export async function addItemToCart(itemId : any) {
   }
 
   var updatedCartContents;
+
+  var nonce = Date.now()
+  var itemWithNonce = {itemId, nonce}
+
   if (customer_cart == null || customer_cart.order_contents == null) {
-    updatedCartContents = [itemId];
+    updatedCartContents = [itemWithNonce];
   } else {
     updatedCartContents = JSON.parse(customer_cart.order_contents); 
-    updatedCartContents.push(itemId);
+    updatedCartContents.push(itemWithNonce);
   }
 
   updatedCartContents = JSON.stringify(updatedCartContents);
