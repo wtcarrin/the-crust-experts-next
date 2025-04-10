@@ -23,6 +23,7 @@ export async function getLiveCartSubtotal() {
     var cartItemIDs = item.ingredientIds
 
     for (var itemId of cartItemIDs) {
+      if(!allIngredients) return;
       const ingredient = allIngredients.find(item => item.menu_item_id === itemId);
       if(!ingredient) {
         console.log("Can't find ingredient with id: " + itemId)
