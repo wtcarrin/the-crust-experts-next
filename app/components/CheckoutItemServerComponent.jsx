@@ -14,18 +14,6 @@ export async function CheckoutItemServerComponent({menuItem, cartItem}) {
   console.log("cartItem: ", cartItem);
   console.log("menuItem: ", menuItem);
 
-  var ingredientsString = ''
-  for (const ingredient of ingredients) {
-    if (cartItemIDs.includes(ingredient.menu_item_id)) {
-      if (ingredientsString === '') {
-        ingredientsString += ingredient.name
-      }
-      else {
-        ingredientsString += ', ' + ingredient.name
-      }
-      }
-    }
-
   return (
     <CheckoutItem menuItem={menuItem} cartItem={cartItem} cartItemPrice={cartItemPrice} ingredients={ingredients} cartItemIDs={cartItemIDs}  />
   )

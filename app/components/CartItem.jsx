@@ -5,6 +5,7 @@ import { getAllIngredients } from '../actions/getAllIngredients';
 import { getAllSizes } from '../actions/getAllSizes';
 import { getSumCostOfIngredients } from '../actions/getSumCostOfIngredients';
 import { updateItemInCart } from '../actions/updateItemInCart';
+import { deleteItemFromCart } from '../actions/deleteItemFromCart'
 
 export async function CartItem({menuItem, cartItem}) {
   var ingredients = await getAllIngredients();
@@ -31,7 +32,7 @@ export async function CartItem({menuItem, cartItem}) {
   }
   else {
     return (
-        <NotCustomCartItem menuItem={menuItem} cartItem={cartItem} cartItemPrice={cartItemPrice} ingredients={ingredients} sizes={sizes} getSumCostOfIngredients={getSumCostOfIngredients} updateItemInCart={updateItemInCart} />
+        <NotCustomCartItem menuItem={menuItem} cartItem={cartItem} cartItemPrice={cartItemPrice} sizes={sizes} deleteItemFromCart={deleteItemFromCart} getSumCostOfIngredients={getSumCostOfIngredients} updateItemInCart={updateItemInCart} />
     )
   }
 };

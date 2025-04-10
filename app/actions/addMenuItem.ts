@@ -11,12 +11,17 @@ export async function addMenuItem(formData: FormData) {
       );
       const category = formData.get('category')
       const customizable = formData.get('customizable')
-      const selectedIngredients = formData
+      
+      var selectedIngredients = formData
         .getAll('ingredients')
         .map(item => typeof item === 'string' ? Number(item) : NaN)
         .filter(num => !isNaN(num));
 
       const supabase = await createClient();
+
+      if (customizable) {
+        selectedIngredients = []
+      }
       
       const { error } = await supabase
         .from('menu items')

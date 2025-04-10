@@ -4,20 +4,18 @@ import { CustomMenuItem } from './CustomMenuItem';
 import { addItemToCart } from '../actions/addItemToCart';
 import { getSumCostOfIngredients } from '../actions/getSumCostOfIngredients';
 
-export async function CustomMenuItemServerComponent({ menuItem }) {
-  var ingredients = await getAllIngredients();
+export async function CustomMenuItemServerComponent({ menuItem , ingredients}) {
   var sizes = await getAllSizes();
-
   var menuItemIDs = menuItem.ingredients
 
-  var menuItemPrice = await getSumCostOfIngredients(menuItemIDs)
+  var menuItemPrice = await getSumCostOfIngredients(menuItemIDs, ingredients)
   if (menuItem.category === "Pizza") {
-    ingredients = ingredients.filter(ingredient => ingredient.category === "Pizza Ingredient");
+    var myIngredients = ingredients.filter(ingredient => ingredient.category === "Pizza Ingredient");
     sizes = sizes.filter(size => size.category === "Pizza Ingredient");
   }
   else if (menuItem.category === "Salad") {
-    ingredients = ingredients.filter(ingredient => ingredient.category === "Salad Ingredient");
+    var myIngredients = ingredients.filter(ingredient => ingredient.category === "Salad Ingredient");
     sizes = sizes.filter(size => size.category === "Salad Ingredient");
   }
-  return <CustomMenuItem menuItem={menuItem} ingredients={ingredients} menuItemPrice={menuItemPrice} sizes={sizes} addItemToCart={addItemToCart} getSumCostOfIngredients={getSumCostOfIngredients}/>;
+  return <CustomMenuItem menuItem={menuItem} ingredients={myIngredients} menuItemPrice={menuItemPrice} sizes={sizes} addItemToCart={addItemToCart} getSumCostOfIngredients={getSumCostOfIngredients}/>;
 }

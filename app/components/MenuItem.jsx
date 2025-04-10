@@ -1,10 +1,10 @@
 import { CustomMenuItemServerComponent } from '../components/CustomMenuItemServerComponent';
 import { NotCustomMenuItemServerComponent } from '../components/NotCustomMenuItemServerComponent';
 
-export function MenuItem({menuItem}) {
+export function MenuItem({menuItem, ingredients}) {
   if (menuItem.customizable) {
     return (
-      <CustomMenuItemServerComponent menuItem={menuItem} />
+      <CustomMenuItemServerComponent menuItem={menuItem} ingredients={ingredients} />
     )
   }
   return (

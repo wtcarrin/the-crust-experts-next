@@ -1,8 +1,10 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { Trash2 } from 'lucide-react';
 
-export function NotCustomCartItem({menuItem, cartItem, cartItemPrice, ingredients, sizes, addItemToCart, getSumCostOfIngredients, updateItemInCart}) {
+
+export function NotCustomCartItem({menuItem, cartItem, cartItemPrice , sizes, deleteItemFromCart, getSumCostOfIngredients, updateItemInCart}) {
     const [selectedIngredients, setSelectedIngredients] = useState(cartItem.ingredientIds);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [totalPrice, setTotalPrice] = useState(cartItemPrice);
@@ -103,7 +105,17 @@ export function NotCustomCartItem({menuItem, cartItem, cartItemPrice, ingredient
                             <span>L</span>
                         </label>
                     </div>
-
+                    <form action={async () => {
+                    deleteItemFromCart(cartItem.nonce);
+                    }}>
+                    <button 
+                      type="submit"
+                      className="p-1 text-red-500 hover:text-red-700 transition-colors"
+                      aria-label="Delete menu item"
+                    >
+                      <Trash2 size={18} />
+                    </button>
+                  </form>
                     <p className="text-sm text-gray-600">{menuItem.description}</p>
                 </div>
 
