@@ -47,7 +47,6 @@ export default function RootLayout({
                       <Link href={"/changeMenu"}>Change menu</Link>
                       <Link href={"/adminDashboard"}>Admin dashboard</Link>
                       <Link href={"/viewSingleOrder"}>Individual order</Link>
-                      <Link href={"/addOrder"}>Add order</Link>
                       <Link href={"/cart"}>Cart</Link>
                       <Link href={"/profile"}>Profile</Link>
                     </div>

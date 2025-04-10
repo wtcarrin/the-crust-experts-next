@@ -1,6 +1,7 @@
+"use server";
 import { createClient } from '@/utils/supabase/server';
 
-export async function addItemToCart(itemId : any) {
+export async function addItemToCart(itemId : any, ingredients? : any) {
   const supabase = await createClient();
 
   // Check authentication
@@ -10,21 +11,22 @@ export async function addItemToCart(itemId : any) {
     return { error: 'User not authenticated', customer: null, userId: null };
   }
   // Make sure we don't accept invalid id:
-    let { error: menuError } = await supabase
-      .from('menu items')
-      .select()
-      .eq('menu_item_id', itemId)
-    
-    if (menuError) {
-      console.error('Error deleting menu item: ', menuError);
-      throw menuError;
-    }
+  let { error: menuError } = await supabase
+    .from('menu items')
+    .select()
+    .eq('menu_item_id', itemId)
+  
+  if (menuError) {
+    console.error('Error deleting menu item: ', menuError);
+    throw menuError;
+  }
 
   // Get current cart
   let { data: customer_cart, error: getCartError } = await supabase
     .from('orders')
     .select("order_contents")
     .eq("order_owner_id", authData.user.id)
+    .eq('order_status', 'IN_PROGRESS')
     .single();
 
   if (getCartError) {
@@ -33,8 +35,18 @@ export async function addItemToCart(itemId : any) {
 
   var updatedCartContents;
 
+  const ingredientIds = []
+  if (ingredients) {
+    for (const ingredient of ingredients) {
+        ingredientIds.push(ingredient as number);
+    }
+  }
+  console.log('ingredients', ingredients)
+  console.log('ingredientIds', ingredientIds)
+
   var nonce = Date.now()
-  var itemWithNonce = {itemId, nonce}
+  var itemWithNonce = {itemId, nonce, ingredientIds}
+  console.log('itemWithNonce', itemWithNonce)
 
   if (customer_cart == null || customer_cart.order_contents == null) {
     updatedCartContents = [itemWithNonce];
@@ -51,6 +63,7 @@ export async function addItemToCart(itemId : any) {
       order_contents: updatedCartContents
     })
     .eq('order_owner_id', authData.user.id)
+    .eq('order_status', 'IN_PROGRESS')
     .select();
 
   if (error) {

@@ -1,50 +1,48 @@
+import { getAllMenuItems } from '../actions/getAllMenuItems';
+import { deleteItemFromCart } from '../actions/deleteItemFromCart';
+import { getPaidOrder } from '../actions/getPaidOrder';
+import { getPaidCartSubtotal } from '../actions/getPaidCartSubtotal';
 
+export default async function ViewSingleOrder({ searchParams }: { searchParams: Promise<{ p?: string }> }) {
+  const { p } = await searchParams;
 
-export default async function Orders() {
-
-  return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">Cart</h1>
-      <h4>problems with viewsingleorder, can't query database if 'use client', can't use useSearchParams without 'use client'</h4>
-    </div>
-  );
-}
-
-
-/*
-import { createClient } from '@/utils/supabase/server';
-import { revalidatePath, revalidateTag } from 'next/cache';
-import { redirect  } from 'next/navigation';
-import { createClient } from '@/utils/supabase/server';
-import { useSearchParams } from 'next/navigation';
-
-export default async function ViewSingleOrder() 
-{
-  const searchParams = useSearchParams()
-  const orderId = searchParams.get('q') as string;
-  const supabase = await createClient()
-
-  if (!orderId) {
-    return <p>No order ID provided</p>;
+  if (!p) {
+    return <div>No id provided . . . </div>
   }
 
-  const { data: order, error } = await supabase
-    .from('orders')
-    .select('*')
-    .eq('order_id', orderId)
-    .maybeSingle();
+  const parsedP = parseInt(p, 10);
 
-  if (error) throw error;
+  const menuItems = await getAllMenuItems();
+  const { order, orderInfo, userId, error } = await getPaidOrder(parsedP);
+  const subtotal = await getPaidCartSubtotal(parsedP);
 
+  if (!Array.isArray(order)) {
+    return <div>Error: Order data is not available or is not an array.</div>;
+  }
   return (
-    <div>
-      <h1>Order Details</h1>
-      {order ? (
-        <pre>{JSON.stringify(order, null, 2)}</pre>
-      ) : (
-        <p>Order not found with id: {orderId}</p>
-      )}
+    <div className="p-6">
+      <h1>{JSON.stringify(orderInfo)}</h1>
+      <h1>ORDER_STATUS: {orderInfo.order_status}</h1>
+      {order.map((orderItem) => {
+          var itemId = orderItem.itemId;
+          var itemNonce = orderItem.nonce;
+          const menuItem = menuItems.find(item => item.menu_item_id === itemId);
+
+          if (!menuItem) {
+            deleteItemFromCart(itemNonce);
+            return;
+          }
+
+          return (
+            <div 
+              key={itemNonce}
+              className="w-full border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow"
+            >
+              <h1>{JSON.stringify(menuItem)}</h1>
+              <h1>SUBTOTAL: {subtotal}</h1>
+            </div>
+          );
+        })}
     </div>
   );
 }
-*/

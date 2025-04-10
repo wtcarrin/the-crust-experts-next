@@ -1,6 +1,6 @@
 import { createClient } from '@/utils/supabase/server';
 
-export async function getCustomerCart() {
+export async function getLiveCustomerCart() {
   const supabase = await createClient();
   const { data: authData, error: authError } = await supabase.auth.getUser();
 
@@ -8,16 +8,18 @@ export async function getCustomerCart() {
     return { cart: [], userId: null, error: 'User not authenticated' };
   }
 
-  const { data: cart, error } = await supabase
-    .from("orders")
-    .select("order_contents")
-    .eq("order_owner_id", authData.user.id)
-    .single();
+  let { data: cart, error } = await supabase
+  .from("orders")
+  .select("order_contents")
+  .eq("order_owner_id", authData.user.id)
+  .eq("order_status", "IN_PROGRESS")
+  .single();
+
 
   if (error || !cart) {
+    console.log(error)
     return { cart: [], userId: authData.user.id, error: 'Error fetching customer data' };
   }
-  // Ensure cart_contents is always returned as an array
   let cartContents;
   try {
     cartContents = JSON.parse(cart.order_contents);
@@ -29,7 +31,7 @@ export async function getCustomerCart() {
   }
 
   return { 
-    cart: cartContents, 
+    cart: cartContents,
     userId: authData.user.id, 
     error: null 
   };

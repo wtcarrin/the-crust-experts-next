@@ -46,5 +46,5 @@ export async function deleteItemFromCart(itemNonce : number) {
       return { error: error.message, customer: null };
     }
   
-      revalidateTag('menu_items');
+      
     }

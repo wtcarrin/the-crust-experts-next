@@ -49,17 +49,24 @@ export async function signup(formData: FormData) {
   }
 
   if (authData.user) {
-    const { error: insertError } = await supabase
+    const { data: existingOrder, error: fetchError } = await supabase
       .from('orders')
-      .insert([
-        {
-          order_owner_id: authData.user.id,
-          order_contents : null
-        }
-      ]);
+      .select('*')
+      .eq('order_owner_id', authData.user.id)
+      .eq('order_status', 'IN_PROGRESS')
+      .single();
 
-    if (insertError) {
-      redirect('/error');
+    if (!existingOrder) {
+      const { error: insertError } = await supabase
+        .from('orders')
+        .insert([
+          {
+            order_owner_id: authData.user.id,
+            order_contents: null,
+            order_status: 'IN_PROGRESS',
+          },
+        ]);
+
     }
   }
 

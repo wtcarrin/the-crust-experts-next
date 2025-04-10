@@ -1,4 +1,4 @@
-"use client";
+'use client'
 import '../styles/globals.css'; // Import CSS to load for all pages
 import { useRouter } from "next/navigation";
 import { signup } from "../actions/signup";

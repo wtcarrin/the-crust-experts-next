@@ -1,15 +1,15 @@
 import { createClient } from "@/utils/supabase/server";
 
-export async function getAllMenuItems() {
+export async function getAllSizes() {
   const supabase = await createClient();
   
   const { data, error } = await supabase
     .from("menu items")
     .select("*")
-    .in("category", ["Pizza", "Salad", "Side", "Drink"]);
+    .like("name", "%Size%")
 
   if (error) {
-    console.error("Error fetching menu items:", error);
+    console.error("Error fetching ingredients:", error);
     return [];
   }
 
