@@ -1,23 +1,32 @@
-import { getAllIngredients } from '../actions/getAllIngredients';
-import { getAllSizes } from '../actions/getAllSizes';
 import { NotCustomMenuItem } from './NotCustomMenuItem';
 import { addItemToCart } from '../actions/addItemToCart';
-import { getSumCostOfIngredients } from '../actions/getSumCostOfIngredients';
 
-export async function NotCustomMenuItemServerComponent({ menuItem }) {
-  var ingredients = await getAllIngredients();
-  var sizes = await getAllSizes();
-
+export function NotCustomMenuItemServerComponent({ menuItem , ingredients, sizes}) {
+  function getSumCostOfIngredients(cartItemIDs) {  
+    const allIngredients = ingredients
+    var subTotal = 0
+    for (var itemId of cartItemIDs) {
+      if(!allIngredients) return;
+      const ingredient = allIngredients.find(item => item.menu_item_id === Number(itemId));
+      if(!ingredient) {
+        console.log("Can't find ingredient with id: " + itemId)
+        console.log("Type of ingredient: " + typeof ingredient)
+        console.log("Type of itemId: " + typeof itemId)
+      }
+      subTotal += ingredient?.price ?? 0;
+    }
+    return subTotal;
+  }
   var menuItemIDs = menuItem.ingredients
 
-  var menuItemPrice = await getSumCostOfIngredients(menuItemIDs)
+  var menuItemPrice = getSumCostOfIngredients(menuItemIDs)
   if (menuItem.category === "Pizza") {
-    ingredients = ingredients.filter(ingredient => ingredient.category === "Pizza Ingredient");
-    sizes = sizes.filter(size => size.category === "Pizza Ingredient");
+    var myIngredients = ingredients.filter(ingredient => ingredient.category === "Pizza Ingredient");
+    var mySizes = sizes.filter(size => size.category === "Pizza Ingredient");
   }
   else if (menuItem.category === "Salad") {
-    ingredients = ingredients.filter(ingredient => ingredient.category === "Salad Ingredient");
-    sizes = sizes.filter(size => size.category === "Salad Ingredient");
+    var myIngredients = ingredients.filter(ingredient => ingredient.category === "Salad Ingredient");
+    var mySizes = sizes.filter(size => size.category === "Salad Ingredient");
   }
-  return <NotCustomMenuItem menuItem={menuItem} ingredients={ingredients} menuItemPrice={menuItemPrice} sizes={sizes} addItemToCart={addItemToCart} getSumCostOfIngredients={getSumCostOfIngredients}/>;
+  return <NotCustomMenuItem menuItem={menuItem} ingredients={myIngredients} menuItemPrice={menuItemPrice} sizes={mySizes} addItemToCart={addItemToCart} />;
 }

@@ -2,17 +2,17 @@
 
 import { useState, useEffect } from 'react';
 import { Trash2 } from 'lucide-react';
+import { clientGetSumCostOfIngredients } from '../actions/clientGetSumCostOfIngredients';
 
-
-export function NotCustomCartItem({menuItem, cartItem, cartItemPrice , sizes, deleteItemFromCart, getSumCostOfIngredients, updateItemInCart}) {
+export function NotCustomCartItem({menuItem, cartItem, cartItemPrice , ingredients, sizes, deleteItemFromCart, getSumCostOfIngredients, updateItemInCart}) {
     const [selectedIngredients, setSelectedIngredients] = useState(cartItem.ingredientIds);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const [totalPrice, setTotalPrice] = useState(cartItemPrice);
+    const [totalPrice, setTotalPrice] = useState();
     const [selectedSize, setSelectedSize] = useState();
 
-    const smallSize = sizes.find(ingredient => ingredient.name === "Small Size");
-    const mediumSize = sizes.find(ingredient => ingredient.name === "Medium Size");
-    const largeSize = sizes.find(ingredient => ingredient.name === "Large Size");
+    const smallSize = sizes?.find(ingredient => ingredient.name === "Small Size");
+    const mediumSize = sizes?.find(ingredient => ingredient.name === "Medium Size");
+    const largeSize = sizes?.find(ingredient => ingredient.name === "Large Size");
 
     useEffect(() => {
         cartItem.ingredientIds.forEach(ingredient => {
@@ -27,8 +27,8 @@ export function NotCustomCartItem({menuItem, cartItem, cartItemPrice , sizes, de
     }, []);
 
     useEffect(() => {
-        console.log("Type of selected ingredients: ", typeof selectedIngredients);
-        setTotalPrice(getSumCostOfIngredients(selectedIngredients));
+        //setTotalPrice(getSumCostOfIngredients(selectedIngredients));
+        setTotalPrice(clientGetSumCostOfIngredients(selectedIngredients, ingredients))
     }, [selectedIngredients]);
 
     const handleSizeChange = (size) => {
@@ -60,8 +60,10 @@ export function NotCustomCartItem({menuItem, cartItem, cartItemPrice , sizes, de
         } else {
             setSelectedIngredients(newIngredients);
         }
-
-        updateItemInCart(cartItem.nonce, [...newIngredients, itemSize.menu_item_id]);
+        if (selectedSize) {
+            updateItemInCart(cartItem.nonce, [...newIngredients, itemSize.menu_item_id]);
+        }
+        
     };
 
     return (

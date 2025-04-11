@@ -7,32 +7,51 @@ import { getSumCostOfIngredients } from '../actions/getSumCostOfIngredients';
 import { updateItemInCart } from '../actions/updateItemInCart';
 import { deleteItemFromCart } from '../actions/deleteItemFromCart'
 
-export async function CartItem({menuItem, cartItem}) {
-  var ingredients = await getAllIngredients();
-  var sizes = await getAllSizes();
+import { clientGetSumCostOfIngredients } from '../actions/clientGetSumCostOfIngredients';
+
+export async function CartItem({menuItem, cartItem, allIngredients, sizes}) {
+  
+  function getSumCostOfIngredients(cartItemIDs,ingredients) {  
+    const allIngredients = ingredients
+    var subTotal = 0
+    for (var itemId of cartItemIDs) {
+      if(!allIngredients) return;
+      const ingredient = allIngredients.find(item => item.menu_item_id === Number(itemId));
+      if(!ingredient) {
+        console.log("Can't find ingredient with id: " + itemId)
+        console.log("Type of ingredient: " + typeof ingredient)
+        console.log("Type of itemId: " + typeof itemId)
+      }
+      subTotal += ingredient?.price ?? 0;
+    }
+    return subTotal;
+  }
+  //var ingredients = await getAllIngredients();
+  var ingredients = allIngredients
+  
 
   var cartItemIDs = cartItem.ingredientIds
-  var cartItemPrice = await getSumCostOfIngredients(cartItemIDs)
-
+  //var cartItemPrice = await getSumCostOfIngredients(cartItemIDs)
+  var cartItemPrice = getSumCostOfIngredients(cartItemIDs, allIngredients)
+  if (menuItem.category === "Pizza") {
+    var myIngredients = ingredients.filter(ingredient => ingredient.category === "Pizza Ingredient");
+    var mySizes = sizes.filter(size => size.category === "Pizza Ingredient");
+  }
+  else if (menuItem.category === "Salad") {
+    var myIngredients = ingredients.filter(ingredient => ingredient.category === "Salad Ingredient");
+    var mySizes = sizes.filter(size => size.category === "Salad Ingredient");
+  }
+  else if (menuItem.category === "Drink") {
+    var mySizes = sizes.filter(size => size.category === "Drink");
+  }
   if (menuItem.customizable) {
-    if (menuItem.category === "Pizza") {
-      ingredients = ingredients.filter(ingredient => ingredient.category === "Pizza Ingredient");
-      
-      sizes = sizes.filter(size => size.category === "Pizza Ingredient");
-    }
-    else if (menuItem.category === "Salad") {
-      ingredients = ingredients.filter(ingredient => ingredient.category === "Salad Ingredient");
-      sizes = sizes.filter(size => size.category === "Salad Ingredient");
-    }
     return (
-        //<CustomCartItem menuItem={menuItem} cartItem={cartItem} allIngredients={allIngredients} />
-        
-        <CustomCartItem menuItem={menuItem} cartItem={cartItem} cartItemPrice={cartItemPrice} ingredients={ingredients} sizes={sizes} getSumCostOfIngredients={getSumCostOfIngredients} updateItemInCart={updateItemInCart} />
+      <CustomCartItem menuItem={menuItem} cartItem={cartItem} cartItemPrice={cartItemPrice} ingredients={myIngredients} sizes={mySizes} updateItemInCart={updateItemInCart}/>
     )
   }
   else {
     return (
-        <NotCustomCartItem menuItem={menuItem} cartItem={cartItem} cartItemPrice={cartItemPrice} sizes={sizes} deleteItemFromCart={deleteItemFromCart} getSumCostOfIngredients={getSumCostOfIngredients} updateItemInCart={updateItemInCart} />
+      <NotCustomCartItem menuItem={menuItem} cartItem={cartItem} cartItemPrice={cartItemPrice} ingredients={myIngredients} sizes={sizes} deleteItemFromCart={deleteItemFromCart} updateItemInCart={updateItemInCart} />
     )
   }
 };

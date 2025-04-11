@@ -29,9 +29,7 @@ export async function updateItemInCart(orderItemNonce : any, ingredients : any) 
 
     for (var item of jsonCartContents) {
         if (item.nonce == orderItemNonce) {
-        console.log("Old ingredients: " + item.ingredientIds)
         item.ingredientIds = ingredients;
-        console.log("New ingredients: " + item.ingredientIds)
         }
     }
 

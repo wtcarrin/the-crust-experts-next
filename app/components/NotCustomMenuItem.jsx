@@ -1,12 +1,12 @@
 "use client";
 
 import { useState, useEffect } from 'react';
+import { clientGetSumCostOfIngredients } from '../actions/clientGetSumCostOfIngredients';
 
-export function NotCustomMenuItem({ menuItem, sizes, menuItemprice, addItemToCart, getSumCostOfIngredients }) {
-    // Filter size options from ingredients
-    const smallSize = sizes.find(ingredient => ingredient.name == "Small Size");
-    const mediumSize = sizes.find(ingredient => ingredient.name == "Medium Size");
-    const largeSize = sizes.find(ingredient => ingredient.name == "Large Size");
+export function NotCustomMenuItem({ menuItem, sizes, menuItemprice, addItemToCart, ingredients }) {
+    const smallSize = sizes?.find(ingredient => ingredient.name === "Small Size");
+    const mediumSize = sizes?.find(ingredient => ingredient.name === "Medium Size");
+    const largeSize = sizes?.find(ingredient => ingredient.name === "Large Size");
 
     const [selectedIngredients, setSelectedIngredients] = useState(menuItem.ingredients);
     const [totalPrice, setTotalPrice] = useState(menuItemprice || 0);
@@ -19,7 +19,8 @@ export function NotCustomMenuItem({ menuItem, sizes, menuItemprice, addItemToCar
 
     // Update total price when ingredients change
     useEffect(() => {
-        setTotalPrice(getSumCostOfIngredients(selectedIngredients));
+        //setTotalPrice(getSumCostOfIngredients(selectedIngredients));
+        setTotalPrice(clientGetSumCostOfIngredients(selectedIngredients,ingredients))
     }, [selectedIngredients]);
 
     const handleSizeChange = (size) => {

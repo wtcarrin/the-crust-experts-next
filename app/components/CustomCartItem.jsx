@@ -1,8 +1,9 @@
 'use client'
 
 import { useState, useEffect } from 'react';
+import { clientGetSumCostOfIngredients } from '../actions/clientGetSumCostOfIngredients';
 
-export function CustomCartItem({ menuItem, cartItem, cartItemPrice, ingredients, sizes, addItemToCart, getSumCostOfIngredients, updateItemInCart }) {
+export function CustomCartItem({ menuItem, cartItem, cartItemPrice, ingredients, sizes, addItemToCart, updateItemInCart }) {
     var [selectedIngredients, setSelectedIngredients] = useState(cartItem.ingredientIds);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     
@@ -10,9 +11,9 @@ export function CustomCartItem({ menuItem, cartItem, cartItemPrice, ingredients,
     const [selectedSize, setSelectedSize] = useState();
 
     // Filter size options from ingredients
-    const smallSize = sizes.find(ingredient => ingredient.name == "Small Size");
-    const mediumSize = sizes.find(ingredient => ingredient.name == "Medium Size");
-    const largeSize = sizes.find(ingredient => ingredient.name == "Large Size");
+    const smallSize = sizes?.find(ingredient => ingredient.name == "Small Size");
+    const mediumSize = sizes?.find(ingredient => ingredient.name == "Medium Size");
+    const largeSize = sizes?.find(ingredient => ingredient.name == "Large Size");
 
     // Set default size to medium if not selected
     useEffect(() => {
@@ -32,7 +33,8 @@ export function CustomCartItem({ menuItem, cartItem, cartItemPrice, ingredients,
     // Update total price when selected ingredients or size changes
     useEffect(() => {
         console.log("Type of selected ingredients: ", typeof selectedIngredients)
-        setTotalPrice(getSumCostOfIngredients(selectedIngredients));
+        //setTotalPrice(getSumCostOfIngredients(selectedIngredients));
+        setTotalPrice(clientGetSumCostOfIngredients(selectedIngredients, ingredients))
     }, [selectedIngredients]);
 
     const handleIngredientChange = (ingredient, isChecked) => {
