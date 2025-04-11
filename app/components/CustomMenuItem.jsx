@@ -9,28 +9,45 @@ export function CustomMenuItem({ menuItem, ingredients, sizes, menuItemprice, ad
     const mediumSize = sizes?.find(ingredient => ingredient.name == "Medium Size");
     const largeSize = sizes?.find(ingredient => ingredient.name == "Large Size");
 
+    const sizePrices = {
+        S: smallSize?.price || 0,
+        M: mediumSize?.price || 0,
+        L: largeSize?.price || 0
+    }
+
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     const [selectedIngredients, setSelectedIngredients] = useState(menuItem.ingredients);
-    const [totalPrice, setTotalPrice] = useState(menuItemprice);
-    const [selectedSize, setSelectedSize] = useState();
+    const [totalPrice, setTotalPrice] = useState(mediumSize.price);
+    const [selectedSize, setSelectedSize] = useState('M');
     
-    console.log("Type of selected ingredients: ", typeof selectedIngredients)
-    console.log("Selected ingredients: ", selectedIngredients)
-
+    
     // Set default size to medium if not selected
     useEffect(() => {
         handleSizeChange('M');
     }, [])
 
-    // Update total price when selected ingredients or size changes
     useEffect(() => {
-        setTotalPrice(clientGetSumCostOfIngredients(selectedIngredients, ingredients));
-    }, [selectedIngredients]);
+        const calculatePrice = async () => {
+            const baseIngredients = menuItem.ingredients.concat(selectedIngredients).filter(ingredient =>
+                ingredient !== smallSize?.menu_item_id &&
+                ingredient !== mediumSize?.menu_item_id &&
+                ingredient !== largeSize?.menu_item_id
+            );
+
+            const basePrice = await clientGetSumCostOfIngredients(baseIngredients, ingredients);
+            
+            const newPrice = basePrice + sizePrices[selectedSize];
+            setTotalPrice(newPrice);
+        };
+
+        calculatePrice();
+    }, [selectedSize, selectedIngredients]);
 
     const handleIngredientChange = (ingredient, isChecked) => {
         if (isChecked) {
             // Add ingredient if checked
             setSelectedIngredients(selectedIngredients => [...selectedIngredients, ingredient.menu_item_id]);
+            console.log("adding ", ingredient.name, " to custom item.")
         }
         else {
             // Remove ingredient if unchecked
@@ -79,6 +96,19 @@ export function CustomMenuItem({ menuItem, ingredients, sizes, menuItemprice, ad
     if (isPopupOpen) {
         return (
             <div className="w-full border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+                <div className="flex items-center justify-center">
+                        {menuItem.photo_url ? (
+                            <img 
+                                src={menuItem.photo_url} 
+                                alt={menuItem.name}
+                                className="w-16 h-16 object-cover rounded-lg"
+                            />
+                        ) : (
+                            <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
+                                <span className="text-xs text-gray-500">No image</span>
+                            </div>
+                        )}
+                    </div>
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg p-6 max-w-md w-full">
                         <div className="flex justify-between items-center mb-4">
@@ -180,13 +210,26 @@ export function CustomMenuItem({ menuItem, ingredients, sizes, menuItemprice, ad
     else {
         return (
             <div className="w-full border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+                <div className="flex items-center justify-center">
+                        {menuItem.photo_url ? (
+                            <img 
+                                src={menuItem.photo_url} 
+                                alt={menuItem.name}
+                                className="w-16 h-16 object-cover rounded-lg"
+                            />
+                        ) : (
+                            <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
+                                <span className="text-xs text-gray-500">No image</span>
+                            </div>
+                        )}
+                    </div>
                 <div className="grid grid-cols-5 gap-4 items-center">
                     <div className="col-span-2">
                         <h2 className="text-lg font-semibold">{menuItem.name}</h2>
                         <p className="text-sm text-gray-600">{menuItem.description}</p>
                     </div>
                     <div>
-                        <p className="font-medium">${menuItem.price}</p>
+                        <p className="font-medium">${totalPrice}</p>
                     </div>
                     <div>
                         <span className="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full">

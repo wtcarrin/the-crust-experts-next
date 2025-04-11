@@ -9,6 +9,5 @@ export async function getAllSizes() {
     .from("menu items")
     .select("*")
     .like("name", "%Size%")
-
   return data;
 }

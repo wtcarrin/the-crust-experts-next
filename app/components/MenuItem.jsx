@@ -8,6 +8,7 @@ export function MenuItem({menuItem, ingredients, sizes}) {
     )
   }
   return (
+    
     <NotCustomMenuItemServerComponent menuItem={menuItem} ingredients={ingredients} sizes={sizes} />
   )
 };

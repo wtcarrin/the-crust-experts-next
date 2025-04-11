@@ -42,16 +42,16 @@ export async function CartItem({menuItem, cartItem, allIngredients, sizes}) {
     var mySizes = sizes.filter(size => size.category === "Salad Ingredient");
   }
   else if (menuItem.category === "Drink") {
-    var mySizes = sizes.filter(size => size.category === "Drink");
+    var mySizes = sizes.filter(size => size.category === "Drink Ingredient");
   }
   if (menuItem.customizable) {
     return (
-      <CustomCartItem menuItem={menuItem} cartItem={cartItem} cartItemPrice={cartItemPrice} ingredients={myIngredients} sizes={mySizes} updateItemInCart={updateItemInCart}/>
+      <CustomCartItem menuItem={menuItem} cartItem={cartItem} cartItemPrice={cartItemPrice} ingredients={myIngredients} sizes={mySizes} deleteItemFromCart={deleteItemFromCart} updateItemInCart={updateItemInCart}/>
     )
   }
   else {
     return (
-      <NotCustomCartItem menuItem={menuItem} cartItem={cartItem} cartItemPrice={cartItemPrice} ingredients={myIngredients} sizes={sizes} deleteItemFromCart={deleteItemFromCart} updateItemInCart={updateItemInCart} />
+      <NotCustomCartItem menuItem={menuItem} cartItem={cartItem} cartItemPrice={cartItemPrice} ingredients={myIngredients} sizes={mySizes} deleteItemFromCart={deleteItemFromCart} updateItemInCart={updateItemInCart} />
     )
   }
 };

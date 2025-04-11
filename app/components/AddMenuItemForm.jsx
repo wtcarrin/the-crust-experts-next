@@ -8,7 +8,6 @@ export async function AddMenuItemForm() {
     <div className="mb-8 p-4 border rounded-lg w-full">
       <h2 className="text-lg font-semibold mb-4">Add New Menu Item</h2>
       <form action={addMenuItem} className="space-y-4">
-        {/* Stacked form fields */}
         <div className="space-y-4">
           <input
             type="text"
@@ -49,9 +48,47 @@ export async function AddMenuItemForm() {
               Customizable
             </label>
           </div>
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <input
+                type="radio"
+                name="photo_url"
+                id="photo_pizza"
+                value="https://otrbpskhxvpdphfvxfgj.supabase.co/storage/v1/object/sign/menu-photos/defaultPizza.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJtZW51LXBob3Rvcy9kZWZhdWx0UGl6emEuanBnIiwiaWF0IjoxNzQ0NDA2NzUwLCJleHAiOjE3NzU5NDI3NTB9._cIKp87orI5LjjFjAyTPtnyf55e3UGt7BBoKfVm9sAU"
+                className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+                defaultChecked
+              />
+              <label htmlFor="photo_pizza" className="text-sm text-gray-700">
+                Default Pizza Image
+              </label>
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="radio"
+                name="photo_url"
+                id="photo_salad"
+                value="https://otrbpskhxvpdphfvxfgj.supabase.co/storage/v1/object/sign/menu-photos/defaultSalad.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJtZW51LXBob3Rvcy9kZWZhdWx0U2FsYWQuanBnIiwiaWF0IjoxNzQ0NDA2NzM5LCJleHAiOjE3NzU5NDI3Mzl9.HUAkQKinhLvB71SbzWbg0DLy8MPwmWWnD-QRIMYso7M"
+                className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+              />
+              <label htmlFor="photo_salad" className="text-sm text-gray-700">
+                Default Salad Image
+              </label>
+            </div>
+            <div className="flex items-center gap-2">
+              <input
+                type="radio"
+                name="photo_url"
+                id="photo_drink"
+                value="https://otrbpskhxvpdphfvxfgj.supabase.co/storage/v1/object/sign/menu-photos/defaultSoda.jpg?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1cmwiOiJtZW51LXBob3Rvcy9kZWZhdWx0U29kYS5qcGciLCJpYXQiOjE3NDQ0MDY3MzMsImV4cCI6MTc3NTk0MjczM30.vMPdzrnNcxzR5OMq5-UMEOFAxyEMeIj9udnA8A8ZsTA"
+                className="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500"
+              />
+              <label htmlFor="photo_drink" className="text-sm text-gray-700">
+                Default Drink Image
+              </label>
+            </div>
+          </div>
         </div>
 
-        {/* Ingredients Section - Horizontal card layout */}
         <div className="mt-6">
           <h3 className="text-md font-medium mb-3">Select Ingredients:</h3>
           <div className="flex flex-wrap gap-3">

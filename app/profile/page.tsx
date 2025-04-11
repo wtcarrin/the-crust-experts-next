@@ -7,7 +7,7 @@ export default async function Profile() {
   if (!customer) {
     return (
       <div className="p-6">
-        <h1 className="text-2xl font-bold mb-6">Profile is null! This should never happen bro.</h1>
+        <h1 className="text-2xl font-bold mb-6">You're signed in as a guest!</h1>
       </div>
         );
   }

@@ -18,7 +18,6 @@ export function NotCustomMenuItemServerComponent({ menuItem , ingredients, sizes
     return subTotal;
   }
   var menuItemIDs = menuItem.ingredients
-
   var menuItemPrice = getSumCostOfIngredients(menuItemIDs)
   if (menuItem.category === "Pizza") {
     var myIngredients = ingredients.filter(ingredient => ingredient.category === "Pizza Ingredient");
@@ -27,6 +26,10 @@ export function NotCustomMenuItemServerComponent({ menuItem , ingredients, sizes
   else if (menuItem.category === "Salad") {
     var myIngredients = ingredients.filter(ingredient => ingredient.category === "Salad Ingredient");
     var mySizes = sizes.filter(size => size.category === "Salad Ingredient");
+  }
+  else if (menuItem.category === "Drink") {
+    var myIngredients = ingredients.filter(ingredient => ingredient.category === "Drink Ingredient");
+    var mySizes = sizes.filter(size => size.category === "Drink Ingredient");
   }
   return <NotCustomMenuItem menuItem={menuItem} ingredients={myIngredients} menuItemPrice={menuItemPrice} sizes={mySizes} addItemToCart={addItemToCart} />;
 }

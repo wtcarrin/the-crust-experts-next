@@ -62,7 +62,7 @@ export default async function Checkout() {
         })}
           <h2 className="text-lg font-semibold">{subtotal}</h2>
           </div>
-            <SubmitOrderButton orderId={existingOrder.order_id}/>
+            <SubmitOrderButton orderId={existingOrder.order_id} subtotal={subtotal}/>
     </div>
   );
 }

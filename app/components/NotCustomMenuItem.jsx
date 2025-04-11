@@ -2,26 +2,44 @@
 
 import { useState, useEffect } from 'react';
 import { clientGetSumCostOfIngredients } from '../actions/clientGetSumCostOfIngredients';
+import { type } from 'os';
 
 export function NotCustomMenuItem({ menuItem, sizes, menuItemprice, addItemToCart, ingredients }) {
     const smallSize = sizes?.find(ingredient => ingredient.name === "Small Size");
     const mediumSize = sizes?.find(ingredient => ingredient.name === "Medium Size");
     const largeSize = sizes?.find(ingredient => ingredient.name === "Large Size");
 
-    const [selectedIngredients, setSelectedIngredients] = useState(menuItem.ingredients);
-    const [totalPrice, setTotalPrice] = useState(menuItemprice || 0);
-    const [selectedSize, setSelectedSize] = useState();
+    const sizePrices = {
+        S: smallSize?.price || 0,
+        M: mediumSize?.price || 0,
+        L: largeSize?.price || 0
+    }
 
-    // Set default size to medium on first render
+    const [selectedIngredients, setSelectedIngredients] = useState(menuItem.ingredients);
+    const [totalPrice, setTotalPrice] = useState(mediumSize.price);
+    const [selectedSize, setSelectedSize] = useState('M');
+
     useEffect(() => {
         handleSizeChange('M');
     }, []);
 
-    // Update total price when ingredients change
     useEffect(() => {
-        //setTotalPrice(getSumCostOfIngredients(selectedIngredients));
-        setTotalPrice(clientGetSumCostOfIngredients(selectedIngredients,ingredients))
-    }, [selectedIngredients]);
+        const calculatePrice = async () => {
+            const baseIngredients = menuItem.ingredients.filter(ingredient =>
+                ingredient !== smallSize?.menu_item_id &&
+                ingredient !== mediumSize?.menu_item_id &&
+                ingredient !== largeSize?.menu_item_id
+            );
+
+            const basePrice = await clientGetSumCostOfIngredients(baseIngredients, ingredients);
+            
+            const newPrice = basePrice + sizePrices[selectedSize];
+            setTotalPrice(newPrice);
+            console.log("Calculated price:", basePrice, "+", sizePrices[selectedSize], "=", newPrice);
+        };
+
+        calculatePrice();
+    }, [selectedSize]);
 
     const handleSizeChange = (size) => {
         setSelectedSize(size);
@@ -57,11 +75,23 @@ export function NotCustomMenuItem({ menuItem, sizes, menuItemprice, addItemToCar
     const handleSubmit = async (e) => {
         e.preventDefault();
         await addItemToCart(menuItem.menu_item_id, selectedIngredients);
-        
     };
 
     return (
         <div className="w-full border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+            <div className="flex items-center justify-center">
+                        {menuItem.photo_url ? (
+                            <img 
+                                src={menuItem.photo_url} 
+                                alt={menuItem.name}
+                                className="w-16 h-16 object-cover rounded-lg"
+                            />
+                        ) : (
+                            <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
+                                <span className="text-xs text-gray-500">No image</span>
+                            </div>
+                        )}
+                    </div>
             <div className="grid grid-cols-5 gap-4 items-center">
                 <div className="col-span-2">
                     <h2 className="text-lg font-semibold">{menuItem.name}</h2>

@@ -44,11 +44,9 @@ export default function RootLayout({
                   <div className="flex gap-5 items-center font-semibold">
                     <div className="flex items-center gap-2">
                       <Link href={"/menu"}>Menu</Link>
-                      <Link href={"/changeMenu"}>Change menu</Link>
-                      <Link href={"/adminDashboard"}>Admin dashboard</Link>
-                      <Link href={"/viewSingleOrder"}>Individual order</Link>
                       <Link href={"/cart"}>Cart</Link>
                       <Link href={"/profile"}>Profile</Link>
+                      <Link href={"/adminDashboard"}>Admin dashboard</Link>
                     </div>
                   </div>
                   {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}

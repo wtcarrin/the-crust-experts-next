@@ -2,8 +2,9 @@
 
 import { useState, useEffect } from 'react';
 import { clientGetSumCostOfIngredients } from '../actions/clientGetSumCostOfIngredients';
+import { Trash2 } from 'lucide-react';
 
-export function CustomCartItem({ menuItem, cartItem, cartItemPrice, ingredients, sizes, addItemToCart, updateItemInCart }) {
+export function CustomCartItem({ menuItem, cartItem, cartItemPrice, ingredients, sizes, deleteItemFromCart, addItemToCart, updateItemInCart }) {
     var [selectedIngredients, setSelectedIngredients] = useState(cartItem.ingredientIds);
     const [isPopupOpen, setIsPopupOpen] = useState(false);
     
@@ -15,6 +16,7 @@ export function CustomCartItem({ menuItem, cartItem, cartItemPrice, ingredients,
     const mediumSize = sizes?.find(ingredient => ingredient.name == "Medium Size");
     const largeSize = sizes?.find(ingredient => ingredient.name == "Large Size");
 
+    console.log("Customcartitem is rendering ", menuItem.name)
     // Set default size to medium if not selected
     useEffect(() => {
         cartItem.ingredientIds.forEach(ingredient => {
@@ -94,6 +96,19 @@ export function CustomCartItem({ menuItem, cartItem, cartItemPrice, ingredients,
     if (isPopupOpen) {
         return (
             <div className="w-full border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
+                <div className="flex items-center justify-center">
+                        {menuItem.photo_url ? (
+                            <img 
+                                src={menuItem.photo_url} 
+                                alt={menuItem.name}
+                                className="w-16 h-16 object-cover rounded-lg"
+                            />
+                        ) : (
+                            <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
+                                <span className="text-xs text-gray-500">No image</span>
+                            </div>
+                        )}
+                    </div>
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg p-6 max-w-md w-full">
                         <div className="flex justify-between items-center mb-4">
@@ -190,43 +205,56 @@ export function CustomCartItem({ menuItem, cartItem, cartItemPrice, ingredients,
     else {
         return (
             <div className="w-full border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-                <div className="grid grid-cols-5 gap-4 items-center">
+                <div className="grid grid-cols-6 gap-4 items-center">
+                    <div className="flex items-center justify-center">
+                        {menuItem.photo_url ? (
+                            <img 
+                                src={menuItem.photo_url} 
+                                alt={menuItem.name}
+                                className="w-16 h-16 object-cover rounded-lg"
+                            />
+                        ) : (
+                            <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
+                                <span className="text-xs text-gray-500">No image</span>
+                            </div>
+                        )}
+                    </div>
+
                     <div className="col-span-2">
                         <h2 className="text-lg font-semibold">{menuItem.name}</h2>
                         <p className="text-sm text-gray-600">{menuItem.description}</p>
                     </div>
+                    
                     <div>
                         <p className="font-medium">${totalPrice}</p>
                     </div>
+                    
                     <div>
                         <span className="px-2 py-1 bg-gray-100 text-gray-800 text-xs rounded-full">
                             {menuItem.category}
                         </span>
                     </div>
+                    
                     <div className="text-right">
-                        {menuItem.customizable ? (
-                            <button
-                                onClick={() => setIsPopupOpen(true)}
-                                className="text-green-600 hover:underline"
-                                aria-label="Customize item"
-                                type="button"
+                        <button
+                            onClick={() => setIsPopupOpen(true)}
+                            className="text-green-600 hover:underline"
+                            aria-label="Customize item"
+                            type="button"
+                        >
+                            Edit
+                        </button>
+                        <form action={async () => {
+                            deleteItemFromCart(cartItem.nonce);
+                        }}>
+                            <button 
+                                type="submit"
+                                className="p-1 text-red-500 hover:text-red-700 transition-colors"
+                                aria-label="Delete menu item"
                             >
-                                Edit
+                                <Trash2 size={18} />
                             </button>
-                        ) : (
-                            <form action={addItemToCart}>
-                                <input type="hidden" name="menuItemId" value={menuItem.menu_item_id} />
-                                <input type="hidden" name="selectedIngredients" value="[]" />
-                                <input type="hidden" name="totalPrice" value={menuItem.price} />
-                                <button
-                                    type="submit"
-                                    className="text-green-600 hover:underline"
-                                    aria-label="Add to cart"
-                                >
-                                    Add to cart
-                                </button>
-                            </form>
-                        )}
+                        </form>
                     </div>
                 </div>
             </div>

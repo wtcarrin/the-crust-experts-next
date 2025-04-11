@@ -33,6 +33,7 @@ export function AddIngredientForm() {
           <option value="">Select category</option>
           <option value="Pizza Ingredient">Pizza Ingredient</option>
           <option value="Salad Ingredient">Salad Ingredient</option>
+          <option value="Drink Ingredient">Drink Size</option>
         </select>
         <button
           type="submit"

@@ -11,6 +11,9 @@ export async function addMenuItem(formData: FormData) {
       );
       const category = formData.get('category')
       const customizable = formData.get('customizable')
+      const photo_url = formData.get('photo_url')
+
+      console.log("PHOTO URL: ", photo_url)
       
       var selectedIngredients = formData
         .getAll('ingredients')
@@ -31,7 +34,8 @@ export async function addMenuItem(formData: FormData) {
           price : price,
           category : category,
           customizable : customizable,
-          ingredients : selectedIngredients
+          ingredients : selectedIngredients,
+          photo_url : photo_url
       }])
         .select();
       
