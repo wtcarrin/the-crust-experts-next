@@ -39,19 +39,52 @@ export default function RootLayout({
         >
           <main className="min-h-screen flex flex-col items-center">
             <div className="flex-1 w-full flex flex-col gap-20 items-center">
-              <nav className="w-full flex justify-center border-b border-b-foreground/10 h-16">
-                <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
-                  <div className="flex gap-5 items-center font-semibold">
-                    <div className="flex items-center gap-2">
-                      <Link href={"/menu"}>Menu</Link>
-                      <Link href={"/cart"}>Cart</Link>
-                      <Link href={"/profile"}>Profile</Link>
-                      <Link href={"/adminDashboard"}>Admin dashboard</Link>
-                    </div>
-                  </div>
-                  {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
-                </div>
-              </nav>
+            <nav className="w-full flex justify-center bg-white border-b border-b-foreground/10 h-16">
+            <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
+              <div className="text-red-600 text-2xl font-bold mr-8">
+              <Link 
+                  href={"/home"} 
+                >
+                  The Crust Experts
+                </Link>
+              </div>
+              <div className="flex gap-8 items-center font-normal text-base mx-auto">
+                <Link 
+                  href={"/home"} 
+                  className="text-black hover:text-red-600 transition-colors"
+                >
+                  Home
+                </Link>
+                <Link 
+                  href={"/menu"} 
+                  className="text-black hover:text-red-600 transition-colors"
+                >
+                  Menu
+                </Link>
+                <Link 
+                  href={"/cart"} 
+                  className="text-black hover:text-red-600 transition-colors"
+                >
+                  Cart
+                </Link>
+                <Link 
+                  href={"/profile"} 
+                  className="text-black hover:text-red-600 transition-colors"
+                >
+                  Profile
+                </Link>
+                <Link 
+                  href={"/adminDashboard"} 
+                  className="text-black hover:text-red-600 transition-colors"
+                >
+                  Admin dashboard
+                </Link>
+              </div>
+              <div className="ml-8">
+                {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
+              </div>
+            </div>
+          </nav>
               <div className="flex flex-col gap-20 max-w-5xl p-5">
                 {children}
               </div>

@@ -91,7 +91,7 @@ export function NotCustomMenuItem({ menuItem, sizes, menuItemprice, addItemToCar
                                 <span className="text-xs text-gray-500">No image</span>
                             </div>
                         )}
-                    </div>
+            </div>
             <div className="grid grid-cols-5 gap-4 items-center">
                 <div className="col-span-2">
                     <h2 className="text-lg font-semibold">{menuItem.name}</h2>

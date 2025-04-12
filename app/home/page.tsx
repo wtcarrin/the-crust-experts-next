@@ -10,10 +10,9 @@ export default async function menu() {
   return (
     <div className="p-6">
       <div className="space-y-4">
-      <h1 className="text-4xl font-extrabold text-black text-center">Our Menu</h1>
-      <p className="text-sm text-gray-600 text-center mb-6">Customize your perfect pizza or choose from our menu!</p>
-        <MenuCategory menuItems={menuItems} ingredients={ingredients} sizes={sizes} category={"Pizza"}/>
-        <MenuCategory menuItems={menuItems} ingredients={ingredients} sizes={sizes} category={"Salad"}/>
+      <h1 className="text-4xl font-extrabold text-black text-center">Homepage</h1>
+      <p>Quick orders section</p>
+      <p>Free delivery on orders $25+ -- [go to menu hyperlink button]</p>
       </div>
     </div>
   );

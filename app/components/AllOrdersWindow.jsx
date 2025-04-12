@@ -11,6 +11,8 @@ export function AllOrdersWindow({orders}) {
                 <p>Placed by: {order.order_owner_id}</p>
                 <p>STATUS: {order.order_status}</p>
                 <p>Order # {order.order_id}</p>
+                <p>Delivery Address: {order.order_delivery_address}</p>
+                <p>Instructions: {order.order_delivery_instructions}</p>
               </div>
             ))}
           </div>

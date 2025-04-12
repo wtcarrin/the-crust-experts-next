@@ -3,6 +3,7 @@ import { getLiveCartSubtotal } from '../actions/getLiveCartSubtotal';
 import { getAllMenuItems } from '../actions/getAllMenuItems';
 import { deleteItemFromCart } from '../actions/deleteItemFromCart';
 import { createClient } from '@/utils/supabase/server';
+import { getCustomerProfile } from '../actions/getProfileData'
 
 import { CheckoutItemServerComponent } from '../components/CheckoutItemServerComponent'
 
@@ -27,14 +28,22 @@ export default async function Checkout() {
 
   const { cart, userId, error } = await getLiveCustomerCart();
   const menuItems = await getAllMenuItems();
-  const subtotal = await getLiveCartSubtotal();
+  const subtotal = await getLiveCartSubtotal() as number;
+
+  var customer = await getCustomerProfile();
 
   if (error) {
     return <div className="p-6 text-red-600">{error}</div>;
   }
 
   const JSONorderInfo = JSON.stringify(existingOrder)
-
+  if(subtotal <= 0) {
+    return (
+      <div>
+        <h1>Add items to cart to use checkout page.</h1>
+      </div>
+    )
+  }
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">Checkout page</h1>
@@ -60,9 +69,8 @@ export default async function Checkout() {
             </div>
           );
         })}
-          <h2 className="text-lg font-semibold">{subtotal}</h2>
           </div>
-            <SubmitOrderButton orderId={existingOrder.order_id} subtotal={subtotal}/>
+            <SubmitOrderButton orderId={existingOrder.order_id} subtotal={subtotal} customerAddress={customer?.customer?.address || ''}/>
     </div>
   );
 }

@@ -18,9 +18,5 @@ export async function getCustomerProfile() {
     .eq("id", authData.user.id)
     .single();
 
-  if (error || !customer) {
-    return { error: 'Error fetching customer data', customer: null, userId: authData.user.id };
-  }
-
   return { customer, userId: authData.user.id, error: null };
 }

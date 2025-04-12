@@ -1,7 +1,7 @@
 "use server";
 import { createClient } from '@/utils/supabase/server';
 
-export async function submitCustomerOrder(orderId : number, subtotal : number) {
+export async function submitCustomerOrder(orderId : number, subtotal : number, address : string, instructions : string) {
   const supabase = await createClient();
 
   // Check authentication
@@ -22,7 +22,7 @@ export async function submitCustomerOrder(orderId : number, subtotal : number) {
     console.log("Existing order: ", existingOrder)
     await supabase
       .from('orders')
-      .update({ order_status: 'PAID' , price: subtotal})
+      .update({ order_status: 'PAID' , price: subtotal, order_delivery_address : address, order_delivery_instructions : instructions})
       .eq('order_owner_id', authData.user.id)
       .eq('order_status', 'IN_PROGRESS');
 

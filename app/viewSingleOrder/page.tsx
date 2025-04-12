@@ -21,8 +21,14 @@ export default async function ViewSingleOrder({ searchParams }: { searchParams: 
   }
   return (
     <div className="p-6">
-      <h1>{JSON.stringify(orderInfo)}</h1>
-      <h1>ORDER_STATUS: {orderInfo.order_status}</h1>
+      <div key={orderInfo.order_id}>
+        <p>Price: ${orderInfo.price}</p>
+        <p>Placed by: {orderInfo.order_owner_id}</p>
+        <p>STATUS: {orderInfo.order_status}</p>
+        <p>Order # {orderInfo.order_id}</p>
+        <p>Delivery Address: {orderInfo.order_delivery_address}</p>
+        <p>Delivery Instructions: {orderInfo.order_delivery_instructions}</p>
+      </div>
       {order.map((orderItem) => {
           var itemId = orderItem.itemId;
           var itemNonce = orderItem.nonce;

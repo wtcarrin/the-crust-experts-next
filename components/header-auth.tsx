@@ -39,7 +39,7 @@ export default async function AuthButton() {
               size="sm"
               variant={"default"}
               disabled
-              className="opacity-75 cursor-none pointer-events-none"
+              className="opacity-75 cursor-none pointer-events-none bg-red-600 hover:bg-red-700"
             >
               <Link href="/signup">Sign up</Link>
             </Button>
@@ -52,15 +52,15 @@ export default async function AuthButton() {
     return (
       <>
         <div className="flex gap-4 items-center">
-        Signed in as guest!
-        <div className="flex gap-2">
-      <Button asChild size="sm" variant={"outline"}>
-        <Link href="/login">Sign in</Link>
-      </Button>
-      <Button asChild size="sm" variant={"default"}>
-        <Link href="/signup">Sign up</Link>
-      </Button>
-    </div>
+          Signed in as guest!
+          <div className="flex gap-2">
+            <Button asChild size="sm" variant={"outline"} className="bg-white text-black hover:bg-gray-400">
+              <Link href="/login">Sign in</Link>
+            </Button>
+            <Button asChild size="sm" variant={"default"} className="bg-red-600 hover:bg-red-700 text-white">
+              <Link href="/signup">Sign up</Link>
+            </Button>
+          </div>
         </div>
       </>
     );
@@ -76,10 +76,10 @@ export default async function AuthButton() {
     </div>
   ) : (
     <div className="flex gap-2">
-      <Button asChild size="sm" variant={"outline"}>
+      <Button asChild size="sm" variant={"outline"} className="bg-white text-black hover:bg-gray-400">
         <Link href="/login">Sign in</Link>
       </Button>
-      <Button asChild size="sm" variant={"default"}>
+      <Button asChild size="sm" variant={"default"} className="bg-red-600 hover:bg-red-700 text-white">
         <Link href="/signup">Sign up</Link>
       </Button>
     </div>

@@ -20,8 +20,6 @@ export default async function Cart() {
     return <div className="p-6 text-red-600">{error}</div>;
   }
 
-  const JSONcart = JSON.stringify(cart)
-
   return (
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">My Cart</h1>
@@ -56,6 +54,7 @@ export default async function Cart() {
         })}
             {cart.length > 0 && (
             <div className="mt-6">
+              <h1>Subtotal: {subtotal}</h1>
               <Link href={"/checkout"}>Proceed to Checkout</Link>
             </div>
             )}
