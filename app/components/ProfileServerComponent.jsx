@@ -22,10 +22,21 @@ export async function ProfileServerComponent() {
     });
 
     const customer = await getCustomerProfile()
-  return (
-    <div>
-  <ProfileComponent customer={customer.customer} updateProfileInfo={updateProfileInfo}/>
-    <AllOrdersWindow orders={myOrders}/>
-    </div>
-  )
+  if(!customer.customer) {
+    return (
+      <div>
+    <ProfileComponent customer={customer.customer} updateProfileInfo={updateProfileInfo}/>
+      </div>
+    )
+  }
+  else {
+    return (
+      <div>
+      <ProfileComponent customer={customer.customer} updateProfileInfo={updateProfileInfo}/>
+      <h1 className="text-red-600 text-2xl font-bold mr-8">My Orders:</h1>
+      <AllOrdersWindow orders={myOrders}/>
+      </div>
+    )
+  }
+  
 }

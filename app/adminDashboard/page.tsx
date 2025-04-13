@@ -18,6 +18,7 @@ export default async function adminDashboard() {
       <AdminNav/>
 
       <div className="w-full">
+      <h1 className="text-2xl font-bold mb-6">All Orders View:</h1>
         <AllOrdersWindow orders={orders} />
       </div>
     </div>

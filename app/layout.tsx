@@ -85,12 +85,12 @@ export default function RootLayout({
               </div>
             </div>
           </nav>
-              <div className="flex flex-col gap-20 max-w-5xl p-5">
+          <div className="flex flex-col gap-20 w-[90%] p-5">
                 {children}
               </div>
 
               <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-16">
-                <ThemeSwitcher />
+                <h1>FOOTER INFORMATION HERE</h1>
               </footer>
             </div>
           </main>

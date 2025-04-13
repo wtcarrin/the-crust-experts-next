@@ -15,6 +15,7 @@ import { useEffect, useState } from "react";
 const ThemeSwitcher = () => {
   const [mounted, setMounted] = useState(false);
   const { theme, setTheme } = useTheme();
+  setTheme("light")
 
   // useEffect only runs on the client, so now we can safely show the UI
   useEffect(() => {

@@ -4,13 +4,15 @@ import { useState } from "react";
 
 export function ProfileComponent({customer, updateProfileInfo}) {
     const [isPopupOpen, setIsPopupOpen] = useState(false);
-    const first_name = customer.first_name
-    const last_name = customer.last_name
-    const phone_number = customer.phone_number
-    const address = customer.address
+    if(customer) {
+        const first_name = customer.first_name
+        const last_name = customer.last_name
+        const phone_number = customer.phone_number
+        const address = customer.address
+    }
+    
 
     async function handleUpdatedInfo(formData) {
-        console.log("FORMDATA firstname: ", formData.get('first_name'))
         if(formData.get('first_name') != first_name || formData.get('last_name') != last_name || formData.get('phone_number') != phone_number || formData.get('address') != address){
             await updateProfileInfo(formData.get('first_name'), formData.get('last_name'), formData.get('phone_number'), formData.get('address'))
             setIsPopupOpen(false)
@@ -86,7 +88,7 @@ export function ProfileComponent({customer, updateProfileInfo}) {
             <h1>{customer.first_name} {customer.last_name}</h1>
             <h1>Phone: {customer.phone_number}</h1>
             <h1>Address: {customer.address}</h1>
-          <button onClick={() => setIsPopupOpen(true)} className="text-green-600 hover:underline" aria-label="Customize item" type="button">Edit profile</button>
+            <button onClick={() => setIsPopupOpen(true)} className="bg-red-600 text-white text-sm px-3 py-1 rounded hover:bg-red-700" type="button">Edit profile</button>
           </div>
         );
     }
