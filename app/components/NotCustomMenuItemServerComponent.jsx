@@ -1,7 +1,7 @@
-import { NotCustomMenuItem } from './NotCustomMenuItem';
+import { MenuItem } from './MenuItem';
 import { addItemToCart } from '../actions/addItemToCart';
 
-export function NotCustomMenuItemServerComponent({ menuItem , ingredients, sizes}) {
+export function MenuItemServerComponent({ menuItem , ingredients, sizes}) {
   function getSumCostOfIngredients(cartItemIDs) {  
     const allIngredients = ingredients
     var subTotal = 0
@@ -31,5 +31,5 @@ export function NotCustomMenuItemServerComponent({ menuItem , ingredients, sizes
     var myIngredients = ingredients.filter(ingredient => ingredient.category === "Drink Ingredient");
     var mySizes = sizes.filter(size => size.category === "Drink Ingredient");
   }
-  return <NotCustomMenuItem menuItem={menuItem} ingredients={myIngredients} menuItemPrice={menuItemPrice} sizes={mySizes} addItemToCart={addItemToCart} />;
+  return <MenuItem menuItem={menuItem} ingredients={myIngredients} menuItemPrice={menuItemPrice} sizes={mySizes} addItemToCart={addItemToCart} />;
 }

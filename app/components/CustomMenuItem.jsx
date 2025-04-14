@@ -96,26 +96,12 @@ export function CustomMenuItem({ menuItem, ingredients, sizes, menuItemprice, ad
     if (isPopupOpen) {
         return (
             <div className="w-full border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
-                <div className="flex items-center justify-center">
-                        {menuItem.photo_url ? (
-                            <img 
-                                src={menuItem.photo_url} 
-                                alt={menuItem.name}
-                                className="w-16 h-16 object-cover rounded-lg"
-                            />
-                        ) : (
-                            <div className="w-16 h-16 bg-gray-200 rounded-lg flex items-center justify-center">
-                                <span className="text-xs text-gray-500">No image</span>
-                            </div>
-                        )}
-                    </div>
-                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-                    <div className="bg-white rounded-lg p-6 max-w-md w-full">
+                <div className="">
+                    <div className="">
                         <div className="flex justify-between items-center mb-4">
                             <h3 className="text-xl font-bold">Customize {menuItem.name}</h3>
-                            <p className="text-md font-medium">Select Size:</p>
-                            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                                <label className="flex items-center gap-1">
+                            <div className="">
+                                <label className="">
                                 <input 
                                     type="radio" 
                                     name="size" 
@@ -247,13 +233,13 @@ export function CustomMenuItem({ menuItem, ingredients, sizes, menuItemprice, ad
                                 Start customizing!
                             </button>
                         ) : (
-                            <form action={addItemToCart}>
+                            <form onSubmit={handleSubmit} className="mt-auto ">
                                 <input type="hidden" name="menuItemId" value={menuItem.menu_item_id} />
-                                <input type="hidden" name="selectedIngredients" value="[]" />
-                                <input type="hidden" name="totalPrice" value={menuItem.price} />
+                                <input type="hidden" name="selectedIngredients" value={JSON.stringify(selectedIngredients)} />
+                                <input type="hidden" name="totalPrice" value={totalPrice} />
                                 <button
                                     type="submit"
-                                    className="text-green-600 hover:underline"
+                                    className="font-bold w-full bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded-lg transition-colors"
                                     aria-label="Add to cart"
                                 >
                                     Add to cart

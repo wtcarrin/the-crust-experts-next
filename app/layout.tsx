@@ -31,15 +31,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={geistSans.className} suppressHydrationWarning>
       <body className="bg-background text-foreground">
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <main className="min-h-screen flex flex-col items-center">
+          <main className="">
             <div className="flex-1 w-full flex flex-col gap-20 items-center">
-            <nav className="w-full flex justify-center bg-white border-b border-b-foreground/10 h-16">
+            <nav className="">
             <div className="w-full max-w-5xl flex justify-between items-center p-3 px-5 text-sm">
               <div className="text-red-600 text-2xl font-bold mr-8">
               <Link 
@@ -85,7 +79,7 @@ export default function RootLayout({
               </div>
             </div>
           </nav>
-          <div className="flex flex-col gap-20 w-[90%] p-5">
+          <div className="flex flex-col w-[90%]">
                 {children}
               </div>
 
@@ -94,7 +88,6 @@ export default function RootLayout({
               </footer>
             </div>
           </main>
-        </ThemeProvider>
       </body>
     </html>
   );
