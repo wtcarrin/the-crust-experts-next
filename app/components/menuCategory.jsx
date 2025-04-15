@@ -4,10 +4,12 @@ export function MenuCategory({menuItems, ingredients, sizes, category}) {
     const titleBlurbs = {
         Pizza: "Specialty Pizzas",
         Salad: "Fresh Salads",
+        Drink: "Premium Libations"
     };
     const descriptionBlurbs = {
         Pizza: "Cooked to order in our wood-fired pizza oven",
         Salad: "Prepared with the freshest in-season produce",
+        Drink: "Premium Libations"
     };
 
     if (category) {

@@ -84,7 +84,9 @@ export default function RootLayout({
               </div>
 
               <footer className="w-full flex items-center justify-center border-t mx-auto text-center text-xs gap-8 py-16">
-                <h1>FOOTER INFORMATION HERE</h1>
+                <h1> The Crust Experts</h1>
+                <p> Number 662-854-9012</p>
+                <p> Email TheCrustExperts07@gmail.com</p>
               </footer>
             </div>
           </main>

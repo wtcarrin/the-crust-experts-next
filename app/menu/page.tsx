@@ -25,11 +25,18 @@ export default async function menu() {
         sizes={sizes} 
         category={"Pizza"} 
       />
+
       <MenuCategory 
         menuItems={menuItems} 
         ingredients={ingredients} 
         sizes={sizes} 
         category={"Salad"} 
+      />
+      <MenuCategory 
+        menuItems={menuItems} 
+        ingredients={ingredients} 
+        sizes={sizes} 
+        category={"Drink"} 
       />
     </div>
 
