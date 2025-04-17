@@ -1,15 +1,15 @@
 import { getAllMenuItems } from '../actions/getAllMenuItems';
 import { getAllSizes } from '../actions/getAllSizes';
-import { getAllIngredientsAndSizes } from '../actions/getAllIngredientsAndSizes';
+import { getAllIngredientsNoSizes } from '../actions/getAllIngredientsNoSizes';
 import { MenuCategory } from '../components/menuCategory'
 
 export default async function menu() {
   const menuItems = await getAllMenuItems();
-  const ingredients = await getAllIngredientsAndSizes();
+  const ingredients = await getAllIngredientsNoSizes();
   var sizes = await getAllSizes();
   
   return (
-    <div className="mx-auto px-4 sm:px-6 lg:px-8 max-w-screen-xl">
+    <div className="mx-auto w-[80%] px-4 sm:px-6 lg:px-8 flex-wrap justify-center">
       <div className="text-center mb-8">
         <h1 className="text-4xl font-extrabold text-black mb-2">
           Our Menu

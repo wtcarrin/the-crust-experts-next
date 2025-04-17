@@ -11,8 +11,7 @@ export async function CheckoutItemServerComponent({menuItem, cartItem}) {
 
   var cartItemIDs = cartItem.ingredientIds
   var cartItemPrice = await getSumCostOfIngredients(cartItemIDs)
-  console.log("cartItem: ", cartItem);
-  console.log("menuItem: ", menuItem);
+
 
   return (
     <CheckoutItem menuItem={menuItem} cartItem={cartItem} cartItemPrice={cartItemPrice} ingredients={ingredients} cartItemIDs={cartItemIDs}  />

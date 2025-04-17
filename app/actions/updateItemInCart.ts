@@ -26,7 +26,7 @@ export async function updateItemInCart(orderItemNonce : any, ingredients : any) 
   var jsonCartContents
   if (currentCartContents) {
     jsonCartContents   = JSON.parse(currentCartContents.order_contents);
-
+    
     for (var item of jsonCartContents) {
         if (item.nonce == orderItemNonce) {
         item.ingredientIds = ingredients;

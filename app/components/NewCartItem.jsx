@@ -2,9 +2,13 @@
 
 import { useState, useEffect } from 'react';
 import { clientGetSumCostOfIngredients } from '../actions/clientGetSumCostOfIngredients';
+import { getSumCostOfIngredients } from '../actions/getSumCostOfIngredients';
 import { type } from 'os';
+import { Trash2 } from 'lucide-react';
+import { deleteItemFromCart } from '../actions/deleteItemFromCart';
+import { updateItemInCart } from '../actions/updateItemInCart';
 
-export function MenuItem({ menuItem, sizes, menuItemprice, addItemToCart, ingredients }) {
+export function NewCartItem({ menuItem, sizes, cartItem, ingredients, mySize }) {
     const smallSize = sizes?.find(ingredient => ingredient.name === "Small Size");
     const mediumSize = sizes?.find(ingredient => ingredient.name === "Medium Size");
     const largeSize = sizes?.find(ingredient => ingredient.name === "Large Size");
@@ -16,14 +20,14 @@ export function MenuItem({ menuItem, sizes, menuItemprice, addItemToCart, ingred
         M: mediumSize?.price || 0,
         L: largeSize?.price || 0
     }
-
-    const [selectedIngredients, setSelectedIngredients] = useState(menuItem.ingredients);
-    const [totalPrice, setTotalPrice] = useState(mediumSize.price);
-    const [selectedSize, setSelectedSize] = useState('M');
+    const [selectedIngredients, setSelectedIngredients] = useState(cartItem.ingredientIds);
+    const [totalPrice, setTotalPrice] = useState(0);
+    const [selectedSize, setSelectedSize] = useState(mySize);
+    
 
     useEffect(() => {
-        handleSizeChange('M');
-    }, []);
+        updateItemInCart(cartItem.nonce, selectedIngredients)
+    }, [selectedIngredients, selectedSize]);
 
     useEffect(() => {
       const calculatePrice = async () => {
@@ -36,25 +40,28 @@ export function MenuItem({ menuItem, sizes, menuItemprice, addItemToCart, ingred
           const basePrice = await clientGetSumCostOfIngredients(baseIngredients, ingredients);
           
           const newPrice = basePrice + sizePrices[selectedSize];
-          console.log("basePrice: ", basePrice, "\tnewPrice: ", newPrice)
-          setTotalPrice(newPrice);
+          setTotalPrice(newPrice);  
       };
 
       calculatePrice();
   }, [selectedSize, selectedIngredients]);
 
+    const updateItemInMyCart = (closePopup) => {
+        console.log("SELECTED INGREDIENTS: ", selectedIngredients)
+        updateItemInCart(cartItem.nonce, selectedIngredients)
+        if(closePopup) {
+            setIsPopupOpen(false)
+        }
+    }
     const handleIngredientChange = (ingredient, isChecked) => {
       console.log("HANDLING INGREDIENT CHANGE")
       if (isChecked) {
-          // Add ingredient if checked
           setSelectedIngredients(selectedIngredients => [...selectedIngredients, ingredient.menu_item_id]);
-          console.log("adding ", ingredient.name, " to custom item.")
       }
       else {
-          // Remove ingredient if unchecked
           setSelectedIngredients(selectedIngredients.filter(item => item !== ingredient.menu_item_id));
       }
-  };
+    };
 
     const handleSizeChange = (size) => {
         setSelectedSize(size);
@@ -88,12 +95,12 @@ export function MenuItem({ menuItem, sizes, menuItemprice, addItemToCart, ingred
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
-        await addItemToCart(menuItem.menu_item_id, selectedIngredients);
-        if(menuItem.customizable) {
-          setIsPopupOpen(false);
-          setSelectedIngredients([]);
-        }
+        // e.preventDefault();
+        // await addItemToCart(menuItem.menu_item_id, selectedIngredients);
+        // if(menuItem.customizable) {
+        //   setIsPopupOpen(false);
+        //   setSelectedIngredients([]);
+        // }
     };
 
     if (isPopupOpen) {
@@ -103,11 +110,11 @@ export function MenuItem({ menuItem, sizes, menuItemprice, addItemToCart, ingred
                   <div className="">
                       <div className="flex justify-between items-center mb-4">
                           <h3 className="text-xl font-bold">Customize {menuItem.name}</h3>
-                          <div className="">
+                          <div className={cartItem.nonce}>
                               <label className="">
                               <input 
                                   type="radio" 
-                                  name="size" 
+                                  name={cartItem.nonce} 
                                   value="S" 
                                   checked={selectedSize === 'S'}
                                   onChange={() => handleSizeChange('S')}
@@ -118,7 +125,7 @@ export function MenuItem({ menuItem, sizes, menuItemprice, addItemToCart, ingred
                               <label className="flex items-center gap-1">
                               <input 
                                   type="radio" 
-                                  name="size" 
+                                  name={cartItem.nonce} 
                                   value="M" 
                                   checked={selectedSize === 'M'}
                                   onChange={() => handleSizeChange('M')}
@@ -129,7 +136,7 @@ export function MenuItem({ menuItem, sizes, menuItemprice, addItemToCart, ingred
                               <label className="flex items-center gap-1">
                               <input 
                                   type="radio" 
-                                  name="size" 
+                                  name={cartItem.nonce} 
                                   value="L" 
                                   checked={selectedSize === 'L'}
                                   onChange={() => handleSizeChange('L')}
@@ -141,7 +148,6 @@ export function MenuItem({ menuItem, sizes, menuItemprice, addItemToCart, ingred
                           <button 
                               onClick={() => {
                                   setIsPopupOpen(false);
-                                  setSelectedIngredients([]);
                               }}
                               className="text-gray-500 hover:text-gray-700"
                               type="button"
@@ -184,9 +190,10 @@ export function MenuItem({ menuItem, sizes, menuItemprice, addItemToCart, ingred
                           
                           <button
                               type="submit"
+                              onClick={() => updateItemInMyCart(true)}
                               className=""
                           >
-                              Add to Cart
+                              Save
                           </button>
                       </form>
                   </div>
@@ -222,9 +229,9 @@ export function MenuItem({ menuItem, sizes, menuItemprice, addItemToCart, ingred
           <label className="flex items-center gap-1 cursor-pointer">
             <input
               type="radio"
-              name={`size-${menuItem.menu_item_id}`}
+              name={`size-${cartItem.nonce}`}
               value="S"
-              checked={selectedSize === 'S'}
+              checked={selectedSize === 'S'}    
               onChange={() => handleSizeChange('S')}
               className="accent-primary"
             />
@@ -233,7 +240,7 @@ export function MenuItem({ menuItem, sizes, menuItemprice, addItemToCart, ingred
           <label className="flex items-center gap-1 cursor-pointer">
             <input
               type="radio"
-              name={`size-${menuItem.menu_item_id}`}
+              name={`size-${cartItem.nonce}`}
               value="M"
               checked={selectedSize === 'M'}
               onChange={() => handleSizeChange('M')}
@@ -244,7 +251,7 @@ export function MenuItem({ menuItem, sizes, menuItemprice, addItemToCart, ingred
           <label className="flex items-center gap-1 cursor-pointer">
             <input
               type="radio"
-              name={`size-${menuItem.menu_item_id}`}
+              name={`size-${cartItem.nonce}`}
               value="L"
               checked={selectedSize === 'L'}
               onChange={() => handleSizeChange('L')}
@@ -275,12 +282,25 @@ export function MenuItem({ menuItem, sizes, menuItemprice, addItemToCart, ingred
                 <button
                     type="submit"
                     className="font-bold w-full bg-red-600 hover:bg-red-700 text-white py-1 px-2 rounded-lg transition-colors"
-                    aria-label="Add to cart"
+                    aria-label="Save"
                 >
                     Add to cart
                 </button>
             </form>
         )}
+        </div>
+        <div className="p-8">
+        <form action={async () => {
+                        deleteItemFromCart(cartItem.nonce);
+                    }}>
+                        <button 
+                            type="submit"
+                            className="p-1 text-red-500 hover:text-red-700 transition-colors"
+                            aria-label="Delete menu item"
+                        >
+                            <Trash2 size={18} />
+                        </button>
+                    </form>
         </div>
       </div>
     );

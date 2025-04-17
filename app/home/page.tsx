@@ -1,11 +1,11 @@
 import { getAllMenuItems } from '../actions/getAllMenuItems';
 import { getAllSizes } from '../actions/getAllSizes';
-import { getAllIngredientsAndSizes } from '../actions/getAllIngredientsAndSizes';
+import { getAllIngredientsNoSizes } from '../actions/getAllIngredientsNoSizes';
 import { MenuCategory } from '../components/menuCategory'
 
 export default async function menu() {
   const menuItems = await getAllMenuItems();
-  const ingredients = await getAllIngredientsAndSizes();
+  const ingredients = await getAllIngredientsNoSizes();
   var sizes = await getAllSizes();
   return (
     <div className="p-6">

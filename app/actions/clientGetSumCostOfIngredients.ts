@@ -16,5 +16,6 @@ export async function clientGetSumCostOfIngredients(cartItemIDs: number[] , ingr
     }
     subTotal += ingredient?.price ?? 0;
   }
+  console.log("Subtotal from me: ", subTotal)
   return subTotal;
 }

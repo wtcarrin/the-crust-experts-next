@@ -1,6 +1,6 @@
 import { NotCustomCartItem } from '../components/NotCustomCartItem'
 import { CustomCartItem } from '../components/CustomCartItem'
-import { getAllIngredientsAndSizes } from '../actions/getAllIngredientsAndSizes'
+import { getAllIngredientsNoSizes } from '../actions/getAllIngredientsNoSizes'
 import { getAllIngredients } from '../actions/getAllIngredients';
 import { getAllSizes } from '../actions/getAllSizes';
 import { getSumCostOfIngredients } from '../actions/getSumCostOfIngredients';

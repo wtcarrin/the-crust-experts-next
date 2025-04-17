@@ -2,7 +2,6 @@ import { createClient } from "@/utils/supabase/server";
 
 export async function getAllIngredients() {
 
-  console.log("getAllIngredients is calling supabase")
   const supabase = await createClient();
   
   const { data, error } = await supabase

@@ -36,21 +36,21 @@ export function NotCustomCartItem({menuItem, cartItem, cartItemPrice , ingredien
         });
     }, []);
 
+    const calculatePrice = async () => {
+        const baseIngredients = selectedIngredients.ingredients.filter(ingredient =>
+            ingredient !== smallSize?.menu_item_id &&
+            ingredient !== mediumSize?.menu_item_id &&
+            ingredient !== largeSize?.menu_item_id
+        );
+
+        const basePrice = await clientGetSumCostOfIngredients(baseIngredients, ingredients);
+        
+        const newPrice = basePrice + sizePrices[selectedSize];
+        setTotalPrice(newPrice);
+        console.log(menuItem.name , " Calculated price:", basePrice, "+", sizePrices[selectedSize], "=", newPrice);
+    };
+
     useEffect(() => {
-        const calculatePrice = async () => {
-            const baseIngredients = menuItem.ingredients.filter(ingredient =>
-                ingredient !== smallSize?.menu_item_id &&
-                ingredient !== mediumSize?.menu_item_id &&
-                ingredient !== largeSize?.menu_item_id
-            );
-
-            const basePrice = await clientGetSumCostOfIngredients(baseIngredients, ingredients);
-            
-            const newPrice = basePrice + sizePrices[selectedSize];
-            setTotalPrice(newPrice);
-            console.log(menuItem.name , " Calculated price:", basePrice, "+", sizePrices[selectedSize], "=", newPrice);
-        };
-
         calculatePrice();
     }, [selectedSize]);
 

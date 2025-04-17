@@ -1,14 +1,14 @@
 import { createClient } from "@/utils/supabase/server";
 import { getPaidCustomerCart } from "./getPaidCustomerCart";
 import { getAllMenuItems } from "./getAllMenuItems";
-import { getAllIngredientsAndSizes } from "./getAllIngredientsAndSizes";
+import { getAllIngredientsNoSizes } from "./getAllIngredientsNoSizes";
 
 export async function getPaidCartSubtotal(order_id : number) {
   const supabase = await createClient();
   const { data: authData, error: authError } = await supabase.auth.getUser();
   
   const menuItems = await getAllMenuItems()
-  const allIngredients = await getAllIngredientsAndSizes()
+  const allIngredients = await getAllIngredientsNoSizes()
 
   const { cart, userId, error : cartError } = await getPaidCustomerCart(order_id);
   

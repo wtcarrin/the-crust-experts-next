@@ -12,12 +12,16 @@ export async function getSumCostOfIngredients(cartItemIDs: number[]) {
   for (var itemId of cartItemIDs) {
     if(!allIngredients) return;
     const ingredient = allIngredients.find(item => item.menu_item_id === Number(itemId));
+    console.log("Ingredient: ", itemId)
     if(!ingredient) {
       console.log("Can't find ingredient with id: " + itemId)
       console.log("Type of ingredient: " + typeof ingredient)
       console.log("Type of itemId: " + typeof itemId)
     }
-    subTotal += ingredient?.price;
+    else {
+      console.log("Ingredient: ", itemId, "\tCost: ", ingredient.price)
+      subTotal += ingredient?.price;
+    }
   }
   return subTotal;
 }

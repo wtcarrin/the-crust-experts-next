@@ -2,8 +2,6 @@
 
 
 export function CheckoutItem({menuItem, cartItem, cartItemPrice, ingredients, cartItemIDs}) {
-  console.log("cartItem: ", cartItem);
-  console.log("menuItem: ", menuItem);
 
   var ingredientsString = ''
   for (const ingredient of ingredients) {

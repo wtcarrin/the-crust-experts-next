@@ -2,7 +2,6 @@
 
 import { createClient } from '@/utils/supabase/server';
 import { revalidateTag } from 'next/cache';
-import { getSumCostOfIngredients } from './getSumCostOfIngredients';
 export async function addIngredientStock(formData: FormData) {
 
       const supabase = await createClient();
