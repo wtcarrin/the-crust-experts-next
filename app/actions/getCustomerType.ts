@@ -1,6 +1,6 @@
 import { createClient } from '@/utils/supabase/server';
 
-export async function getCustomerProfile() {
+export async function getCustomerType() {
   const supabase = await createClient();
   const { data: authData, error: authError } = await supabase.auth.getUser();
 
@@ -8,9 +8,6 @@ export async function getCustomerProfile() {
     return { error: 'User not authenticated', customer: null, userId: null };
   }
 
-  if (!authData?.user || !authData?.user.email) {
-    return { error: 'Customer logged in as guest! Sign in to see profile details.', customer: null, userId: authData.user.id };
-  }
 
   const { data: customer, error } = await supabase
     .from("customers")

@@ -1,5 +1,6 @@
 import DeployButton from "@/components/deploy-button";
 import { EnvVarWarning } from "@/components/env-var-warning";
+import { createClient } from '@/utils/supabase/server';
 import HeaderAuth from "@/components/header-auth";
 import { ThemeSwitcher } from "@/components/theme-switcher";
 import { hasEnvVars } from "@/utils/supabase/check-env-vars";
@@ -7,6 +8,7 @@ import { Geist } from "next/font/google";
 import { ThemeProvider } from "next-themes";
 import Link from "next/link";
 import "./globals.css";
+import { getCustomerType } from '../app/actions/getCustomerType'
 
 const defaultUrl = process.env.VERCEL_URL
   ? `https://${process.env.VERCEL_URL}`
@@ -23,11 +25,20 @@ const geistSans = Geist({
   subsets: ["latin"],
 });
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const supabase = await createClient();
+  const { data: authData, error: authError } = await supabase.auth.getUser();
+  const profileData = await getCustomerType();
+  console.log("PROFILE DATA: ", profileData)
+  var profileType = 0
+  if(profileData && profileData.customer) {
+    profileType = profileData.customer.user_type
+    console.log("PROFILE TYPE: ", profileType)
+  }
   return (
     <html lang="en" className={geistSans.className} suppressHydrationWarning>
       <body className="bg-background text-foreground">
@@ -67,12 +78,15 @@ export default function RootLayout({
                 >
                   Profile
                 </Link>
+                {profileType && (
                 <Link 
-                  href={"/adminDashboard"} 
-                  className="text-black hover:text-red-600 transition-colors"
+                href={"/adminDashboard"} 
+                className="text-black hover:text-red-600 transition-colors"
                 >
                   Admin dashboard
                 </Link>
+                )}
+                
               </div>
               <div className="ml-8">
                 {!hasEnvVars ? <EnvVarWarning /> : <HeaderAuth />}
