@@ -7,21 +7,33 @@ import { type } from 'os';
 import { Trash2 } from 'lucide-react';
 import { deleteItemFromCart } from '../actions/deleteItemFromCart';
 import { updateItemInCart } from '../actions/updateItemInCart';
+//newcartitem is the combination of customcartitem and noncustomcartitem
+//so it's longer because it includes the ability to customize the cart item if it's customizable
+//but it saves an if/else statement in the parent
 
+//this is exactly the same way we fixed the exact same mistake as MenuItem.jsx
 export function NewCartItem({ menuItem, sizes, cartItem, ingredients, mySize }) {
+    //get sizes from the sizes passed in header
+    //sizes are pre-filtered to be appropriately priced for the type of item
     const smallSize = sizes?.find(ingredient => ingredient.name === "Small Size");
     const mediumSize = sizes?.find(ingredient => ingredient.name === "Medium Size");
     const largeSize = sizes?.find(ingredient => ingredient.name === "Large Size");
 
+    //usestate for opening/closing customize selected items window
     const [isPopupOpen, setIsPopupOpen] = useState(false);
 
+    //dictionary for storing specifically the size prices by S/M/L
     const sizePrices = {
         S: smallSize?.price || 0,
         M: mediumSize?.price || 0,
         L: largeSize?.price || 0
     }
+    //initialize this data with information that may not be correct for custom items, but 
+    //will be updated once the server queries have returned
     const [selectedIngredients, setSelectedIngredients] = useState(cartItem.ingredientIds);
     const [totalPrice, setTotalPrice] = useState(0);
+
+    //like in the menuItem component, this seems redundant but we'll get an error if we don't initialize this with something
     const [selectedSize, setSelectedSize] = useState(mySize);
     
 
@@ -29,6 +41,7 @@ export function NewCartItem({ menuItem, sizes, cartItem, ingredients, mySize }) 
         updateItemInCart(cartItem.nonce, selectedIngredients)
     }, [selectedIngredients, selectedSize]);
 
+    //when selectedSize or ingredients change, we'll use this to recalcualte the price of the item
     useEffect(() => {
       const calculatePrice = async () => {
           const baseIngredients = (selectedIngredients).filter(ingredient =>
@@ -46,6 +59,7 @@ export function NewCartItem({ menuItem, sizes, cartItem, ingredients, mySize }) 
       calculatePrice();
   }, [selectedSize, selectedIngredients]);
 
+    //call updateItemInCart and close the popup window
     const updateItemInMyCart = (closePopup) => {
         console.log("SELECTED INGREDIENTS: ", selectedIngredients)
         updateItemInCart(cartItem.nonce, selectedIngredients)
@@ -53,6 +67,8 @@ export function NewCartItem({ menuItem, sizes, cartItem, ingredients, mySize }) 
             setIsPopupOpen(false)
         }
     }
+
+    //update selctedingredients when one ingredient is removed/added
     const handleIngredientChange = (ingredient, isChecked) => {
       console.log("HANDLING INGREDIENT CHANGE")
       if (isChecked) {
@@ -63,6 +79,7 @@ export function NewCartItem({ menuItem, sizes, cartItem, ingredients, mySize }) 
       }
     };
 
+    //when size changes, add/remove the new and old sizes from selectedingredients
     const handleSizeChange = (size) => {
         setSelectedSize(size);
 
@@ -94,22 +111,15 @@ export function NewCartItem({ menuItem, sizes, cartItem, ingredients, mySize }) 
         }
     };
 
-    const handleSubmit = async (e) => {
-        // e.preventDefault();
-        // await addItemToCart(menuItem.menu_item_id, selectedIngredients);
-        // if(menuItem.customizable) {
-        //   setIsPopupOpen(false);
-        //   setSelectedIngredients([]);
-        // }
-    };
-
     if (isPopupOpen) {
+    {/*render the ingredient selection screen*/}
       return (
           <div className="w-full border rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow">
               <div className="">
                   <div className="">
                       <div className="flex justify-between items-center mb-4">
                           <h3 className="text-xl font-bold">Customize {menuItem.name}</h3>
+                          {/*radio buttons for selecting size*/}
                           <div className={cartItem.nonce}>
                               <label className="">
                               <input 
@@ -145,6 +155,7 @@ export function NewCartItem({ menuItem, sizes, cartItem, ingredients, mySize }) 
                               <span>L</span>
                               </label>
                           </div>
+                          {/*button for closing ingredient selection screen and discarding changes*/}
                           <button 
                               onClick={() => {
                                   setIsPopupOpen(false);
@@ -155,10 +166,11 @@ export function NewCartItem({ menuItem, sizes, cartItem, ingredients, mySize }) 
                               ✕
                           </button>
                       </div>
-                      
+                      {/*form for selecting ingredients*/}
                       <form onSubmit={handleSubmit} className="space-y-4">
                           <p className="text-md font-medium">Select Ingredients:</p>
                           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            {/*map all ingredients to the select ingredients screen*/}
                               {ingredients
                                   ?.filter(ing => !["Small Size", "Medium Size", "Large Size"].includes(ing.name))
                                   ?.map((ingredient) => (
@@ -188,6 +200,7 @@ export function NewCartItem({ menuItem, sizes, cartItem, ingredients, mySize }) 
                               </p>
                           </div>
                           
+                          {/*submit button for updating the item and adding it to cart*/}
                           <button
                               type="submit"
                               onClick={() => updateItemInMyCart(true)}
@@ -204,6 +217,7 @@ export function NewCartItem({ menuItem, sizes, cartItem, ingredients, mySize }) 
       );
   }
   else {
+    {/*render the noncustomizable item.*/}
     return (
         <div className="border rounded-lg p-1 shadow-sm hover:shadow-md items-center justify-center transition-shadow duration-300 w-full max-w-xs mx-auto flex h-full">
 
@@ -293,6 +307,7 @@ export function NewCartItem({ menuItem, sizes, cartItem, ingredients, mySize }) 
         <form action={async () => {
                         deleteItemFromCart(cartItem.nonce);
                     }}>
+                        
                         <button 
                             type="submit"
                             className="p-1 text-red-500 hover:text-red-700 transition-colors"

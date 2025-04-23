@@ -1,8 +1,6 @@
 import { createClient } from '@/utils/supabase/server';
-
+//function to get the cart CONTENTS from a paid order using order_id
 export async function getPaidCustomerCart(order_id: number) {
-    
-  console.log("Order ID: ", order_id)
   const supabase = await createClient();
   const { data: authData, error: authError } = await supabase.auth.getUser();
 
@@ -10,6 +8,7 @@ export async function getPaidCustomerCart(order_id: number) {
     return { cart: [], userId: null, error: 'User not authenticated' };
   }
 
+  //get order contents of a paid order with order_owner_id == current authenticated user's id
   let { data: cart, error } = await supabase
   .from("orders")
   .select("order_contents")
@@ -32,6 +31,7 @@ export async function getPaidCustomerCart(order_id: number) {
     cartContents = [];
   }
 
+  //return the contents of the cart found
   return { 
     cart: cartContents,
     userId: authData.user.id, 

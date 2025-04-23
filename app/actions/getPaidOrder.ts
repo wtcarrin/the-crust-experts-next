@@ -1,6 +1,6 @@
 'use server';
 import { createClient } from '@/utils/supabase/server';
-
+//function to return all of an order's information and contents separately from the database given order_id
 export async function getPaidOrder(order_id : number) {
     const supabase = await createClient();
     const { data: authData, error: authError } = await supabase.auth.getUser();
@@ -9,6 +9,7 @@ export async function getPaidOrder(order_id : number) {
       return { cart: [], userId: null, error: 'User not authenticated' };
     }
   
+    //get all order info
     let { data: order, error } = await supabase
     .from("orders")
     .select("*")
@@ -31,6 +32,7 @@ export async function getPaidOrder(order_id : number) {
       cartContents = [];
     }
   
+    //return cartcontents and all orderinfo separately
     return { 
       order: cartContents,
       orderInfo: orderInfo,

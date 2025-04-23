@@ -2,14 +2,12 @@ import { createClient } from "@/utils/supabase/server";
 import { getLiveCustomerCart } from "./getLiveCustomerCart";
 import { getAllMenuItems } from "./getAllMenuItems";
 import { getAllIngredientsNoSizes } from "./getAllIngredientsNoSizes";
-
+//function to get customer's subtotal according to the cart currently in the database
 export async function getLiveCartSubtotal() {
-  const supabase = await createClient();
-  const { data: authData, error: authError } = await supabase.auth.getUser();
-  
-  const menuItems = await getAllMenuItems()
+  //get all ingredient information
   const allIngredients = await getAllIngredientsNoSizes()
-
+  
+  //get customer cart information
   const { cart, userId, error : cartError } = await getLiveCustomerCart();
   
   if (cartError) {
@@ -17,8 +15,10 @@ export async function getLiveCartSubtotal() {
     return [];
   }
 
+  //initialize variable for keeping track of subtotal
   let subTotal = 0;
 
+  //iterate through all items in customer's current cart and sum the cost of their ingredients
   for (const item of cart) {
     var cartItemIDs = item.ingredientIds
 
@@ -31,6 +31,7 @@ export async function getLiveCartSubtotal() {
       }
       else{
       }
+      //if data is passed correctly, update the subtotal here
       subTotal += ingredient?.price;
     }
 

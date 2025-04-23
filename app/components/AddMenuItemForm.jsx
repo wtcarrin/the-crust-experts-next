@@ -1,13 +1,16 @@
 import { addMenuItem } from '../actions/addMenuItem'
 import { getAllIngredients } from '../actions/getAllIngredients';
-
+//form for admin to add menu items to database
 export async function AddMenuItemForm() {
+  //get all ingredients for the admin to choose from when creating this item
   const ingredients = await getAllIngredients();
   
   return (
     <div className="mb-8 p-4 border rounded-lg w-full">
       <h2 className="text-lg font-semibold mb-4">Add New Menu Item</h2>
+      {/*begin form for menu item info*/}
       <form action={addMenuItem} className="space-y-4">
+        {/*name field*/}
         <div className="space-y-4">
           <input
             type="text"
@@ -16,12 +19,16 @@ export async function AddMenuItemForm() {
             required
             className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+
+          {/*description field*/}
           <input
             type="text"
             name="description"
             placeholder="Item description"
             className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
+
+          {/*category field (dropdown)*/}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <select
               name="category"
@@ -35,6 +42,8 @@ export async function AddMenuItemForm() {
               <option value="Drink">Drink</option>
             </select>
           </div>
+
+          {/*customizable field (checkbox)*/}
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
@@ -48,6 +57,7 @@ export async function AddMenuItemForm() {
               Customizable
             </label>
           </div>
+          {/*radio input for selecting product image*/}
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <input
@@ -90,8 +100,10 @@ export async function AddMenuItemForm() {
         </div>
 
         <div className="mt-6">
+          {/*display for selecting ingredients for this menu item*/}
           <h3 className="text-md font-medium mb-3">Select Ingredients:</h3>
           <div className="flex flex-wrap gap-3">
+            {/*map each ingredient to a checkbox*/}
             {ingredients?.map((ingredient) => (
               <div key={ingredient.menu_item_id} className="flex-shrink-0 w-[200px] border p-3 rounded-lg hover:shadow-md transition-shadow">
                 <div className="flex items-start">
@@ -114,7 +126,7 @@ export async function AddMenuItemForm() {
             ))}
           </div>
         </div>
-
+        {/*submit button*/}
         <button
           type="submit"
           className=""

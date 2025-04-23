@@ -4,13 +4,13 @@ import { getAllMenuItems } from '../actions/getAllMenuItems';
 import { deleteItemFromCart } from '../actions/deleteItemFromCart';
 import { createClient } from '@/utils/supabase/server';
 import { getCustomerProfile } from '../actions/getProfileData'
-
 import { CheckoutItemServerComponent } from '../components/CheckoutItemServerComponent'
-
 import { SubmitOrderButton } from '../components/SubmitOrderButton'
-import { Sub } from '@radix-ui/react-dropdown-menu';
 
+//checkout page which displays customer's cart info
+//and allows them to change status of their order from IN_PROGRESS to PAID
 export default async function Checkout() {
+  //check that user is authenticated
   const supabase = await createClient();
 
   const { data: authData, error: authError } = await supabase.auth.getUser();
@@ -19,6 +19,7 @@ export default async function Checkout() {
     return { error: 'User not authenticated', customer: null, userId: null };
   }
 
+  //get info about the customer's current order
   const { data: existingOrder } = await supabase
     .from('orders')
     .select('*')
@@ -26,6 +27,7 @@ export default async function Checkout() {
     .eq('order_status', 'IN_PROGRESS')
     .maybeSingle();
 
+  //ask the server for most current information about customer's cart
   const { cart, userId, error } = await getLiveCustomerCart();
   const menuItems = await getAllMenuItems();
   const subtotal = await getLiveCartSubtotal() as number;
@@ -37,6 +39,7 @@ export default async function Checkout() {
   }
 
   const JSONorderInfo = JSON.stringify(existingOrder)
+  //check that there are any items in the cart
   if(subtotal <= 0) {
     return (
       <div>
@@ -48,13 +51,14 @@ export default async function Checkout() {
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">Checkout page</h1>
       <h2 className="text-xl font-semibold mt-6">Your order</h2>
-      <h2>{JSONorderInfo}</h2>
+        {/*take each item in the cart and display it as CheckoutItemServerComponent*/}
         <div className="space-y-4">
         {cart.map((cartItem) => {
           var itemId = cartItem.itemId;
           var itemNonce = cartItem.nonce;
           const menuItem = menuItems.find(item => item.menu_item_id === itemId);
 
+          {/*if the customer has an item that is no longer in the database, remove it*/}
           if (!menuItem) {
             deleteItemFromCart(itemNonce);
             return;
@@ -70,6 +74,7 @@ export default async function Checkout() {
           );
         })}
           </div>
+            {/*button which will change the status of the order to PAID*/}
             <SubmitOrderButton orderId={existingOrder.order_id} subtotal={subtotal} customerAddress={customer?.customer?.address || ''}/>
     </div>
   );

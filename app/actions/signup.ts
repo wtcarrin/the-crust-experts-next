@@ -1,10 +1,9 @@
 'use server'
-
-import { revalidatePath } from 'next/cache'
 import { redirect } from 'next/navigation'
 
 import { createClient } from '@/utils/supabase/server'
 
+//function to use client formdata to sign up new users
 export async function signup(formData: FormData) {
 
   const supabase = await createClient();
@@ -48,6 +47,7 @@ export async function signup(formData: FormData) {
     }
   }
 
+  //search for an existing order belonging to this user
   if (authData.user) {
     const { data: existingOrder, error: fetchError } = await supabase
       .from('orders')
@@ -56,6 +56,7 @@ export async function signup(formData: FormData) {
       .eq('order_status', 'IN_PROGRESS')
       .single();
 
+    //if they don't have an order in the database already, make them a blank order
     if (!existingOrder) {
       const { error: insertError } = await supabase
         .from('orders')
@@ -70,5 +71,6 @@ export async function signup(formData: FormData) {
     }
   }
 
+  //redirect to home page
   redirect('/');
 }

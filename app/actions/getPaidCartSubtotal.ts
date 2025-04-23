@@ -1,13 +1,8 @@
-import { createClient } from "@/utils/supabase/server";
 import { getPaidCustomerCart } from "./getPaidCustomerCart";
-import { getAllMenuItems } from "./getAllMenuItems";
 import { getAllIngredientsNoSizes } from "./getAllIngredientsNoSizes";
-
+//function to get the price of an order that's already paid
 export async function getPaidCartSubtotal(order_id : number) {
-  const supabase = await createClient();
-  const { data: authData, error: authError } = await supabase.auth.getUser();
-  
-  const menuItems = await getAllMenuItems()
+  //get all ingredients from supabase
   const allIngredients = await getAllIngredientsNoSizes()
 
   const { cart, userId, error : cartError } = await getPaidCustomerCart(order_id);
@@ -17,8 +12,10 @@ export async function getPaidCartSubtotal(order_id : number) {
     return [];
   }
 
+  //initialize subtotal
   let subTotal = 0;
 
+  //add the price of each ingredient in each cart item to subtotal
   for (const item of cart) {
     var cartItemIDs = item.ingredientIds
 
