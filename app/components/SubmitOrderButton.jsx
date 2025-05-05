@@ -1,56 +1,68 @@
-'use client';
-import { useRouter } from 'next/navigation';
-import { submitCustomerOrder } from '../actions/submitCustomerOrder';
-//this component takes the last information we need to complete the order:
-//delivery address and delivery instructions
-export function SubmitOrderButton({ orderId , subtotal, customerAddress}) {
-    const router = useRouter();
+"use client"
+import { useRouter } from "next/navigation"
+import { submitCustomerOrder } from "../actions/submitCustomerOrder"
+import { ArrowRight, MapPin, MessageSquare } from "lucide-react"
 
-    //if we don't have an address in the form, don't submit the order to the database.
-    const submit = async (formData) => {
-        if(!formData.get("address")) {
-            return
-        }
-        console.log('Submitting order with ID:', orderId);
-        await submitCustomerOrder(orderId, subtotal, formData.get("address"), formData.get("delivery_instructions"));
-        router.push('/viewSingleOrder?p=' + orderId);
-    };
+// This component takes the last information we need to complete the order:
+// delivery address and delivery instructions
+export function SubmitOrderButton({ orderId, subtotal, customerAddress }) {
+  const router = useRouter()
 
-    return (
-        <div>
-            {/*render the subtotal, tax, delivery fee to custmoer*/}
-        <h2 className="text-lg font-semibold">Subtotal: {subtotal}</h2>
-          <h2 className="text-lg font-semibold">Tax: {.07* subtotal}</h2>
-          <h2 className="text-lg font-semibold">Delivery Fee: $5</h2>
-          <h2 className="text-lg font-semibold">Total: {subtotal * 1.07 + 5}</h2>
-          {/*form for the last info we need*/}
-          <form action={submit} className="flex flex-col gap-2">
-                <label htmlFor="address" className="text-sm font-medium">
-                    Delivery Address
-                </label>
-                {/*make the default delivery address the customer's address if it exists*/}
-                <input
-                    type="text"
-                    name="address"
-                    defaultValue={customerAddress}
-                    required
-                    className="px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Enter your delivery address"
-                />
-                {/*offer the customer a place to specify delivery instructions*/}
-                <input
-                    type="text"
-                    name="delivery_instructions"
-                    className="px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    placeholder="Enter delivery instructions"
-                />
-                {/*submit order button*/}
-                <button type="submit">
-                Submit
-                </button>
-            </form>
-          
+  // If we don't have an address in the form, don't submit the order to the database.
+  const submit = async (formData) => {
+    if (!formData.get("address")) {
+      return
+    }
+    console.log("Submitting order with ID:", orderId)
+    await submitCustomerOrder(orderId, subtotal, formData.get("address"), formData.get("delivery_instructions"))
+    router.push("/viewSingleOrder?p=" + orderId)
+  }
+
+  return (
+    <form action={submit} className="space-y-4">
+      <div className="space-y-3">
+        <div className="flex items-start gap-2">
+          <MapPin className="h-5 w-5 text-gray-400 mt-1" />
+          <div className="flex-1">
+            <label htmlFor="address" className="block text-sm font-medium text-gray-700 mb-1">
+              Delivery Address
+            </label>
+            <input
+              type="text"
+              id="address"
+              name="address"
+              defaultValue={customerAddress}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+              placeholder="Enter your delivery address"
+            />
+          </div>
         </div>
-        
-    );
+
+        <div className="flex items-start gap-2">
+          <MessageSquare className="h-5 w-5 text-gray-400 mt-1" />
+          <div className="flex-1">
+            <label htmlFor="delivery_instructions" className="block text-sm font-medium text-gray-700 mb-1">
+              Delivery Instructions (Optional)
+            </label>
+            <textarea
+              id="delivery_instructions"
+              name="delivery_instructions"
+              rows="2"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"
+              placeholder="Special instructions for delivery"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+
+      <button
+        type="submit"
+        className="w-full flex items-center justify-center gap-2 px-6 py-3 bg-red-600 text-white font-medium rounded-lg hover:bg-red-700 transition-colors"
+      >
+        Complete Order
+        <ArrowRight className="h-4 w-4" />
+      </button>
+    </form>
+  )
 }
