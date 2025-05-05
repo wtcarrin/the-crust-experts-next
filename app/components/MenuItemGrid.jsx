@@ -57,14 +57,12 @@ export async function MenuItemGrid() {
                     <form
                       action={async () => {
                         "use server"
-                        if (confirm(`Are you sure you want to delete ${menuItem.name}?`)) {
-                          await deleteMenuItem(menuItem.menu_item_id)
-                        }
+                        await deleteMenuItem(menuItem.menu_item_id)
                       }}
                     >
                       <button
                         type="submit"
-                        className="absolute top-2 right-2 p-1.5 bg-white/80 backdrop-blur-sm text-red-500 hover:text-red-700 hover:bg-red-50 rounded-full transition-colors"
+                        
                         title="Delete menu item"
                       >
                         <Trash2 size={18} />
